@@ -6,7 +6,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controller');
  
 // Get an instance of the controller prefixed by SaglityPortal
-$controller = JControllerLegacy::getInstance('AdvancedOpenPortal');
+$controller = JController::getInstance('AdvancedOpenPortal');
  
 // Perform the Request task
 $controller->execute(JRequest::getCmd('task'));

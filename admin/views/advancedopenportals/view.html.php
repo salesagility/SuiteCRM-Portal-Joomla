@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class AdvancedOpenPortalViewAdvancedOpenPortals extends JViewLegacy
+class AdvancedOpenPortalViewAdvancedOpenPortals extends JView
 {
 	/**
 	 * HelloWorlds view display method

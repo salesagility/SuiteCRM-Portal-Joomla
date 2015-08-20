@@ -8,9 +8,9 @@ jimport('joomla.application.component.view');
 /**
  * HTML View class for the HelloWorld Component
  */
-class advancedopenportalViewshowcase extends JViewLegacy
+class advancedopenportalViewshowcase extends JView
 {
-	// Overwriting JViewLegacy display method
+	// Overwriting JView display method
 	function display($tpl = null) 
 	{
         include_once 'components/com_advancedopenportal/models/SugarCasesConnection.php';

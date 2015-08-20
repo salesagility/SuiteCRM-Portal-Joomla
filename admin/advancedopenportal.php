@@ -9,7 +9,7 @@ $document = JFactory::getDocument();
 jimport('joomla.application.component.controller');
  
 // Get an instance of the controller prefixed by AdvancedOpenPortal
-$controller = JControllerLegacy::getInstance('AdvancedOpenPortal');
+$controller = JController::getInstance('AdvancedOpenPortal');
  
 // Perform the Request task
 $controller->execute(JRequest::getCmd('task'));

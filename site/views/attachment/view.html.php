@@ -8,9 +8,9 @@ jimport('joomla.application.component.view');
 /**
  *
  */
-class advancedopenportalViewattachment extends JViewLegacy
+class advancedopenportalViewattachment extends JView
 {
-    // Overwriting JViewLegacy display method
+    // Overwriting JView display method
     function display($tpl = null)
     {
         include_once 'components/com_advancedopenportal/models/SugarCasesConnection.php';

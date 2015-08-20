@@ -8,7 +8,7 @@ require_once 'components/com_advancedopenportal/models/SugarCasesConnection.php'
 /**
  * Sagility Portal Component Controller
  */
-class AdvancedOpenPortalController extends JControllerLegacy{
+class AdvancedOpenPortalController extends JController{
 
     public function display($cachable = false,$url_params = false){
         $user =& JFactory::getUser();

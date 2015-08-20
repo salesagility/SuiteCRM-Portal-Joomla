@@ -8,7 +8,7 @@ include_once 'components/com_advancedopenportal/models/advancedopenportals.php';
 /**
  * General Controller of Advanced OpenPortal component
  */
-class AdvancedOpenPortalController extends JControllerLegacy
+class AdvancedOpenPortalController extends JController
 {
 	/**
 	 * display task
