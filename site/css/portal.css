@@ -1,0 +1,92 @@
+.case_update{
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: solid 1px;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+.case_description{
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: solid 1px;
+    margin-top: 5px;
+    padding: 5px;
+    min-height: 50px;
+}
+
+.user_update{
+    margin-right: 50px;
+}
+
+.contact_update{
+    margin-left: 50px;
+}
+
+.show_case_table{
+    width: 100%;
+}
+#case_table{
+    width: 100%;
+}
+
+.portal_form textarea    {
+    height: 125px;
+    width: 375px;
+}
+
+h2 span{
+    font-size: 0.7em;
+}
+
+/*
+ * List view
+ *
+ */
+
+.paginate_enabled_previous{
+    text-decoration: underline;
+}
+.paginate_enabled_next{
+    text-decoration: underline;
+    margin-left: 10px;
+}
+.paginate_disabled_previous{
+    display: none;
+}
+
+.paginate_disabled_next{
+    display: none;
+}
+
+#case_table_info{
+    text-align: center;
+}
+
+#case_table_paginate{
+    text-align: center;
+}
+
+.table_controls{
+    display: inline;
+}
+#case_table_filter{
+    display: inline;
+}
+#case_table_filter label{
+    display: inline;
+}
+#case_table_length{
+    display: inline;
+}
+#case_table_length label{
+    display: inline;
+}
+#select_controls{
+    display: inline;
+}
+#select_controls label{
+    display: inline;
+}

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="1.6.0" method="upgrade">
+	<name>Advanced OpenPortal</name>
+	<creationDate>November 2014</creationDate>
+	<author>SalesAgility</author>
+	<authorEmail>support@salesagility.com</authorEmail>
+	<authorUrl>http://www.salesagility.com</authorUrl>
+	<version>2.0.0</version>
+	<description>Joomla integration for the Advanced OpenPortal SugarCRM case management module</description>
+ 
+	<install> <!-- Runs on install -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+	<uninstall> <!-- Runs on uninstall -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+	<update> <!-- Runs on update; New in 1.6 -->
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+		</schemas>
+	</update>
+	<languages>
+                <language tag="en-GB">language/en-GB/en-GB.com_advancedopenportal.ini</language>
+        </languages>
+	<files folder="site">
+		<folder>css</folder>
+		<folder>libs</folder>
+		<folder>js</folder>
+		<folder>models</folder>
+		<folder>views</folder>
+		<filename>controller.php</filename>
+		<filename>index.html</filename>
+		<filename>advancedopenportal.php</filename>
+		<filename>sugarRestClient.php</filename>
+	</files>
+ 
+	<administration>
+		<menu>Advanced OpenPortal</menu>
+		<files folder="admin">
+			<folder>models</folder>
+			<folder>sql</folder>
+			<folder>tables</folder>
+			<folder>views</folder>
+			<filename>controller.php</filename>
+			<filename>index.html</filename>
+			<filename>advancedopenportal.php</filename>
+		</files>
+		
+		<languages folder="admin">
+			<language tag="en-GB">language/en-GB/en-GB.com_advancedopenportal.ini</language>
+			<language tag="en-GB">language/en-GB/en-GB.com_advancedopenportal.sys.ini</language>
+		</languages>		
+	</administration>
+</extension>
