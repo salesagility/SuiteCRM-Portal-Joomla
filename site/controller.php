@@ -14,8 +14,22 @@ class AdvancedOpenPortalController extends JControllerLegacy{
         $user =& JFactory::getUser();
         $view = JRequest::getVar("view");
         if($view == 'advancedopenportal'){
+            // open portal listcases view
             JRequest::setVar("view","listcases");
             $view = "listcases";
+        }
+        else if($view == 'advancedopenknowledgebase'){
+            // knowledgebase listcategories view
+            JRequest::setVar("view","listcategories");
+            $view = "listcategories";
+            $settings = $this->getModel('advancedopenportal');
+            $check_settings = $settings::getSettings();
+
+            if($check_settings == false){
+                JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_advancedopenportal&view=listcategories'),  JText::_('COM_ADVANCEDOPENKNOWLEDGEBASE_NO_SETTINGS'), 'error');
+            }
+            //
+            //parent::display($cachable,$url_params);
         }
         if(SugarCasesConnection::isValidPortalUser($user) && !SugarCasesConnection::isUserBlocked($user)){
             parent::display($cachable,$url_params);
@@ -291,6 +305,59 @@ class AdvancedOpenPortalController extends JControllerLegacy{
         }
         JFactory::getApplication()->close();
     }
+
+    // -------------
+    // KnowledgeBase
+    // ---------------->
+
+    public function article_search(){
+
+        include_once 'components/com_advancedopenportal/models/SugarKbConnection.php';
+        $user =& JFactory::getUser();
+        $session = JFactory::getSession();
+        $this->errors = array();
+        $mainframe =& JFactory::getApplication();
+        $limit = $mainframe->getUserStateFromRequest( "limit", 'limit', $mainframe->getCfg('list_limit') );
+        $limitstart = $mainframe->getUserStateFromRequest( "$option.limitstart", 'limitstart', 0 );
+
+        //set limit to null if the 'All' opton is set in the pagination limit dropdown.
+        if($limit == '0'){
+            $limit = null;
+        }
+
+        if(!$this->IsNullOrEmptyString($_POST['cat_search'])){
+            $query = $_POST['cat_search'];
+            $session->set('search_query', $query);
+        }
+        else {
+            $query = $session->get('search_query');
+        }
+
+        $Connection = SugarKbConnection::getInstance();
+        $articles = $Connection->searchArticles($query,$limitstart, $limit);
+
+        if($articles['total_count'] == 0){
+            JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_advancedopenportal&view=listcategories'),  JText::_('COM_ADVANCEDOPENKNOWLEDGEBASE_NO_ARTICLES_FOUND'), 'info');
+        }
+        else{
+            $view = $this->getView('articlesearch','html');
+            $view->count = $articles['total_count'];
+            $view->start = $limitstart;
+            $view->limit = $limit;
+            $view->search_query = $query;
+            $view->articles = $articles;
+            $view->display();
+        }
+
+    }
+
+
+
+// Function for basic field validation (present and neither empty nor only white space
+    private function IsNullOrEmptyString($question){
+        return (!isset($question) || trim($question)==='');
+    }
+
 
 
 }

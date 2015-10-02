@@ -31,7 +31,7 @@ class AdvancedOpenPortalController extends JControllerLegacy
         }
 		// set default view if not set
 		JRequest::setVar('view', JRequest::getCmd('view', 'AdvancedOpenPortals'));
- 
+
 		// call parent behavior
 		parent::display($cachable);
 	}
