@@ -334,44 +334,19 @@ class sugarRestClient {
     }
 
     public function set_note_attachment($note_id, $file_name, $file_location){
-        /*if ( !$this->sid )
+        if ( !$this->sid )
             return false;
 
         $result = $this->rest_request( 'set_note_attachment' , array(
-            'session' 			=> $this->sid,
+            'session'                   => $this->sid,
             'note' => array(
                 'id' => $note_id,
                 'filename' => $file_name,
-                'file' => $file,
+                'file' => base64_encode(file_get_contents($file_location)),
             ),
         ));
 
-        return $result;*/
-
-        $server =  $this->base_url."/soap.php?wsdl";
-
-
-        require_once('components/com_advancedopenportal/libs/nusoap/lib/nusoap.php');
-
-        $soapclient = new nusoap_client( $server, true);
-        $attachment = array(
-            'id'=>$note_id,
-            "filename" => $file_name,
-            "file" => base64_encode(file_get_contents($file_location)),
-
-        );
-        $user_auth = array(
-            'user_auth' => array(
-                'user_name' => $this->rest_user,
-                'password'  => $this->rest_pass,
-
-            ));
-        $result_array = @$soapclient->call('login',$user_auth);
-        $session = $result_array['id'];
-        $res = @$soapclient->call('set_note_attachment',array('session' => $session, 'note' => $attachment));
-        return $res;
-
-
+        return $result;
     }
 
     public function get_document_revision($id){
