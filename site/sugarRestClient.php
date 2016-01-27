@@ -8,8 +8,9 @@
  */
 function convertArrayToNVL( $data ){
 	$return = array();
-	foreach ( $data as $key => $value )
-		$return[] = array( 'name' => $key, 'value' => $value );
+	foreach ( $data as $key => $value ) {
+        $return[] = array('name' => $key, 'value' => $value);
+    }
 	return $return;
 }
 
@@ -138,7 +139,7 @@ class sugarRestClient {
 	 * Logout
 	 */
 	public function logout(){
-		$result = $this->rest_request('logout', array(
+		$this->rest_request('logout', array(
 			'session'	=> $this->sid,
 		));
 
@@ -158,8 +159,9 @@ class sugarRestClient {
 	 * @return array
 	 */
 	public function getEntryList( $module, $query = '', $order_by = '', $offset = 0, $select_fields = array(), $related_fields = array(), $max_results = '0', $deleted = false ){
-		if ( !$this->sid )
-			return false;
+		if ( !$this->sid ) {
+            return false;
+        }
 
 		$result = $this->rest_request('get_entry_list', array(
 			'session'		=> $this->sid,
@@ -181,8 +183,9 @@ class sugarRestClient {
 	}
 
     public function getEntry( $module, $id, $select_fields = array(), $related_fields = array() ){
-        if ( !$this->sid )
+        if ( !$this->sid ) {
             return false;
+        }
 
         $result = $this->rest_request('get_entry', array(
             'session'		=> $this->sid,
@@ -207,8 +210,9 @@ class sugarRestClient {
 	 * @return array
 	 */
 	public function setEntry( $module, $data ){
-		if ( !$this->sid )
-			return false;
+		if ( !$this->sid ) {
+            return false;
+        }
 
     	$result = $this->rest_request( 'set_entry' , array(
     		'session' 			=> $this->sid,
@@ -229,8 +233,9 @@ class sugarRestClient {
      * @return array
      */
     public function setRelationship( $module1, $module1_id, $module2, $module2_id ){
-		if ( !$this->sid )
-			return false;
+		if ( !$this->sid ) {
+            return false;
+        }
 
     	$data = array(
     		'session' 	=> $this->sid,
@@ -283,8 +288,9 @@ class sugarRestClient {
 	 * @return field
 	 */
 	public function getModuleFields( $module, $field){
-		if ( !$this->sid )
-			return false;
+		if ( !$this->sid ) {
+            return false;
+        }
 
 		$result = $this->rest_request('get_module_fields', array(
 			'session'		=> $this->sid,
@@ -292,7 +298,6 @@ class sugarRestClient {
 		));
 
 		if ( $result > 0 ){
-			//return $result;
 			return $result['module_fields'][$field];
 		} else {
 			return FALSE;
@@ -300,8 +305,9 @@ class sugarRestClient {
 	}
 
     public function getAllModuleFields( $module){
-        if ( !$this->sid )
+        if ( !$this->sid ) {
             return false;
+        }
 
         $result = $this->rest_request('get_module_fields', array(
             'session'		=> $this->sid,
@@ -309,7 +315,6 @@ class sugarRestClient {
         ));
 
         if ( $result > 0 ){
-            //return $result;
             return $result['module_fields'];
         } else {
             return FALSE;
@@ -317,8 +322,9 @@ class sugarRestClient {
     }
 
 	public function get_note_attachment($note_id) {
-        if ( !$this->sid )
+        if ( !$this->sid ) {
             return false;
+        }
 
 			$call_arguments = array(
 			'session' => $this->sid,
@@ -330,12 +336,12 @@ class sugarRestClient {
 				);
 
 			return $result;
-		return FALSE;
     }
 
     public function set_note_attachment($note_id, $file_name, $file_location){
-        if ( !$this->sid )
+        if ( !$this->sid ) {
             return false;
+        }
 
         $result = $this->rest_request( 'set_note_attachment' , array(
             'session'                   => $this->sid,
@@ -350,8 +356,9 @@ class sugarRestClient {
     }
 
     public function get_document_revision($id){
-        if ( !$this->sid )
+        if ( !$this->sid ) {
             return false;
+        }
 
         $result = $this->rest_request( 'get_document_revision' , array(
             'session' => $this->sid,
@@ -362,8 +369,9 @@ class sugarRestClient {
     }
 
     public function set_document_revision($document_id, $file_name, $file_location, $revision_number = 1){
-        if ( !$this->sid )
+        if ( !$this->sid ) {
             return false;
+        }
 
         $result = $this->rest_request( 'set_document_revision' , array(
             'session' 			=> $this->sid,

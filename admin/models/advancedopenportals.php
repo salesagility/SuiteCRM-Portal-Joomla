@@ -36,7 +36,7 @@ class AdvancedOpenPortalModelAdvancedOpenPortals extends JModelList
         $query->update($db->quoteName('#__advancedopenportal'))->set($fields)->where($conditions);
         $db->setQuery($query);
         try {
-            $result = $db->query();
+            $db->query();
         } catch (Exception $e) {
             return false;
         }
