@@ -28,11 +28,11 @@ include_once 'components/com_advancedopenportal/models/SugarUpdate.php';
 
 class SugarCasesConnection {
 
-    private $case_fields = array('id','name','date_entered','date_modified','description','case_number','type','status','state','priority','contact_created_by_id', 'contact_created_by_name');
-    private $case_update_fields = array('id','name','date_entered','date_modified','description','contact','contact_id', 'internal', 'assigned_user_id');
-    private $contact_fields = array('id','first_name','last_name','date_entered','date_modified','description','portal_user_type','account_id');
-    private $user_fields = array('id','first_name', 'last_name', 'date_entered','date_modified','description');
-    private $note_fields = array('id','name', 'date_entered','date_modified','description','filename','file_url');
+    private $case_fields = array('id','name','date_entered','date_modified','description','resolution','resolution','case_number','type','status','state','priority','contact_created_by_id', 'contact_created_by_name');
+    private $case_update_fields = array('id','name','date_entered','date_modified','description','resolution','contact','contact_id', 'internal', 'assigned_user_id');
+    private $contact_fields = array('id','first_name','last_name','date_entered','date_modified','description','resolution','portal_user_type','account_id');
+    private $user_fields = array('id','first_name', 'last_name', 'date_entered','date_modified','description','resolution');
+    private $note_fields = array('id','name', 'date_entered','date_modified','description','resolution','filename','file_url');
 
     private static $singleton;
 
