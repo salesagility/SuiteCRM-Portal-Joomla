@@ -62,9 +62,17 @@ if($this->allow_case_reopen && strpos($this->case->status, 'Closed') === 0){
         ?>
 
     </span></h2>
+    <h3>Description</h3>
     <div class="case_description">
         <?php
         echo html_entity_decode($this->case->description);
+        displayNotes($this->case);
+        ?>
+    </div>
+    <h3>Resolution</h3>
+    <div class="case_resolution">
+        <?php
+        echo html_entity_decode($this->case->resolution);
         displayNotes($this->case);
         ?>
     </div>

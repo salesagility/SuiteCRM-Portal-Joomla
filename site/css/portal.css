@@ -16,6 +16,15 @@
     padding: 5px;
     min-height: 50px;
 }
+.case_resolution{
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: solid 1px;
+    margin-top: 5px;
+    padding: 5px;
+    min-height: 50px;
+}
 
 .user_update{
     margin-right: 50px;
