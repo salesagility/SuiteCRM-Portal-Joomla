@@ -66,7 +66,7 @@ class sugarRestClient {
         include_once 'components/com_advancedopenportal/models/advancedopenportal.php';
         $settings = AdvancedOpenPortalModelAdvancedOpenPortal::getSettings();
         $this->rest_url =  $settings->sugar_url."/service/v4_1/rest.php";
-        $this->base_url = 'http://' . preg_replace( '~^http://~', '', $settings->sugar_url);
+        $this->base_url = $settings->sugar_url;
         $this->rest_user =  $settings->sugar_user;
         $this->rest_pass =  $settings->sugar_pass;
 	}
@@ -90,10 +90,12 @@ class sugarRestClient {
 		);
 
         curl_setopt($ch, CURLOPT_URL, $this->rest_url);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch ,CURLOPT_ENCODING,'gzip');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        //to allow self signed certificates.
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
         $output = curl_exec($ch);
 
