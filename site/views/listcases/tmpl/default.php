@@ -14,14 +14,11 @@ if(!$this->validPortalUser || $this->userBlocked){
 }
 
 ?>
-<!-- hidding create new case button, uncomment if you need the buton on list page
-
 <form action="<?php echo JURI::base(); ?>index.php" method="get">
     <input type="hidden" name="option" value="com_advancedopenportal">
     <input type="hidden" name="view" value="newcase">
     <input class="button" type="submit" value="<?php echo JText::_('COM_ADVANCEDOPENPORTAL_CREATE_CASE');?>">
 </form>
--->
 <div id="select_controls">
 <label for="status_select"><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS');?>:</label></label><select id="status_select">
     <option value=""><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS_ALL');?></option>
