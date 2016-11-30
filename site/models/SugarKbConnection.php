@@ -81,9 +81,10 @@ class SugarKbConnection {
 
     //Gets all published articles within a defined category
     public function getArticles($id, $offset=0, $limit=10){
-        $ann = $this->restClient->getEntry('AOK_Knowledge_Base_Categories', $id, array(), array(array('name' => 'aok_knowledgebase_aok_knowledge_base_categories', 'value' => array('id','name', 'description', 'author','status', 'date_entered', 'date_modified'))));
+        $ann = $this->restClient->getEntry('AOK_Knowledge_Base_Categories', $id, array(), array(array('name' => 'aok_knowledgebase_categories', 'value' => array('id','name', 'description', 'author','status', 'date_entered', 'date_modified'))));
+        $articles = array();
         foreach($ann['relationship_list'][0] as $rel_mod){
-            if($rel_mod['name'] == 'aok_knowledgebase_aok_knowledge_base_categories'){
+            if($rel_mod['name'] == 'aok_knowledgebase_categories'){
                 $articles = $rel_mod['records'];
             }
         }
@@ -104,7 +105,7 @@ class SugarKbConnection {
 
     //Gets an individual article
     public function getArticle($id){
-        $article = $this->restClient->getEntry('AOK_KnowledgeBase', $id, array('id','name', 'description', 'author','status', 'revision', 'approver', 'date_entered', 'date_modified'),array(array('name' => 'aok_knowledgebase_aok_knowledge_base_categories', 'value' => array('id','name'))));
+        $article = $this->restClient->getEntry('AOK_KnowledgeBase', $id, array('id','name', 'description', 'author','status', 'revision', 'approver', 'date_entered', 'date_modified'),array(array('name' => 'aok_knowledgebase_categories', 'value' => array('id','name'))));
         return $article;
     }
 
@@ -125,9 +126,9 @@ class SugarKbConnection {
 
     //returns a count of the published articles in a category
     public function categoryCount($id){
-        $ann = $this->restClient->getEntry('AOK_Knowledge_Base_Categories', $id, array(), array(array('name' => 'aok_knowledgebase_aok_knowledge_base_categories', 'value' => array('id','name', 'description','status', 'date_entered'))));
+        $ann = $this->restClient->getEntry('AOK_Knowledge_Base_Categories', $id, array(), array(array('name' => 'aok_knowledgebase_categories', 'value' => array('id','name', 'description','status', 'date_entered'))));
         foreach($ann['relationship_list'][0] as $rel_mod){
-            if($rel_mod['name'] == 'aok_knowledgebase_aok_knowledge_base_categories'){
+            if($rel_mod['name'] == 'aok_knowledgebase_categories'){
                 $articles = $rel_mod['records'];
             }
         }
@@ -147,7 +148,7 @@ class SugarKbConnection {
     }
 
     public static function isUserBlocked($user){
-        return $user->getParam("aop_block");
+         return $user->getParam("aop_block");
     }
 
 }
