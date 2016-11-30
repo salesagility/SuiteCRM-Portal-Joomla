@@ -28,7 +28,6 @@
         </languages>
 	<files folder="site">
 		<folder>css</folder>
-		<folder>libs</folder>
 		<folder>js</folder>
 		<folder>models</folder>
 		<folder>views</folder>
