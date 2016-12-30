@@ -25,6 +25,8 @@
 	</update>
 	<languages>
                 <language tag="en-GB">language/en-GB/en-GB.com_advancedopenportal.ini</language>
+                <language tag="it-IT">language/it-IT/it-IT.com_advancedopenportal.ini</language>
+        
         </languages>
 	<files folder="site">
 		<folder>css</folder>

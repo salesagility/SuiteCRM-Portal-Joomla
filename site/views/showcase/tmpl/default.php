@@ -48,28 +48,109 @@ if($this->allow_case_reopen && strpos($this->case->status, 'Closed') === 0){
 ?>
 
 <div id="case">
-<h2><?php echo $this->case->name;?> (#<?php echo $this->case->case_number;?>) <span><?php echo JText::_('COM_ADVANCEDOPENPORTAL_RAISED') .' '.$this->case->contact_created_by_name .' '.JText::_('COM_ADVANCEDOPENPORTAL_RAISED_ON').' ' .$this->case->date_entered;?> <?php echo $this->case->status_display;?>
-        <?php
-        if($closeButtonText) {
-            ?>
-            <form style='display:inline' action="?option=com_advancedopenportal&task=toggleCaseStatus&format=raw" method="post">
+    
+ 
+    
+    <div class="case_fields" id="case_number">
+            <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_NUMBER');?>
+            <span><?php echo $this->case->case_number;?></span>
+    </div>
+    
+        <div class="case_fields" id="case_status">
+             <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS');?>
+             <span>
+                <?php echo $this->case->status_display;?>
+                <?php
+                if($closeButtonText) {
+                ?>
+                <form style='display:inline' action="?option=com_advancedopenportal&task=toggleCaseStatus&format=raw" method="post">
                 <input type="hidden" name="case_status" value="<?php echo $this->case->status; ?>">
                 <input type="hidden" name="case_id" value="<?php echo $this->case->id; ?>">
                 <button type="submit"><?php echo $closeButtonText ?></button>
-            </form>
-        <?php
-        }
-        ?>
+                </form>
+                <?php
+                }
+                ?>
+             </span>        
+        </div>
+   
+    <div class="case_fields" id="case_account">
+            <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_ACCOUNT');?>
+            <span><?php echo $this->case->accounts[0]->name;?></span> 
+    </div>
+    
+        <div class="case_fields" id="case_priority">
+             <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_PRIORITY');?>
+             <span><?php echo $this->case->priority;?></span>
+        </div>
+     
+    <div class="case_fields" id="case_type">
+            <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_TYPE');?>
+            <span><?php echo $this->case->type;?></span>
+    </div>
+    
+        <div class="case_fields" id="case_opendate">
+             <?php echo JText::_('COM_ADVANCEDOPENPORTAL_RAISED_ON');?>
+             <span><?php echo $this->case->date_entered;?></span>
+        </div>
+       
+    <div class="case_fields" id="case_product">
+             <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_PRODUCT');?>
+             <span><?php echo $this->case->product_c;?></span>
+    </div>
+    
+        <div class="case_fields" id="case_last_update">
+             <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_LAST_UPDATE');?>
+             <span><?php echo $this->case->date_modified;?></span>
+        </div>
+    
+    <div class="case_fields" id="case_escalation_number">
+             <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_ESCALATION_NUMBER');?>
+             <span><?php echo $this->case->escalation_number_c;?></span>
+    </div>
+  
+    
 
-    </span></h2>
-    <div class="case_description">
+   
+  
+  
+    <div class="case_section">
+        <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_SUBJECT');?>
+    </div>
+   
+    <div class="case_subject" id="case_subject">
+        <?php echo $this->case->name;?> 
+    </div>
+    
+    <div class="case_section">
+       <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_DESCRIPTION');?> 
+    </div>
+    
+    <div class="case_description" id="case_description">
         <?php
         echo html_entity_decode($this->case->description);
         displayNotes($this->case);
         ?>
     </div>
+    
+    <div class="case_section">
+        <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_RESOLUTION');?>
+    </div>
+   
+    <div class="case_resolution" id="case_resolution">
+        <?php
+        echo html_entity_decode($this->case->resolution);
+        displayNotes($this->case);
+        ?>
+    </div>
 </div>
-<br>
+            
+            
+
+<div class="case_section">
+    <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_UPDATE');?>
+</div>
+
 <div id='updates'>
 <?php
 if(isset($this->case->aop_case_updates)){
@@ -89,13 +170,17 @@ if(isset($this->case->aop_case_updates)){
 </div>
 <br><br>
 <form class="reply_form" action="?option=com_advancedopenportal&task=addupdate&format=raw" method="post" id="replyForm" name="replyForm" enctype="multipart/form-data">
-    <div>
+ 
+    <div id='addfiles'>
         <input type="hidden" name="case_id" value="<?php echo $this->case->id;?>">
         <input type="file" name="file1" id="file1"><br>
         <a href="javascript:;" id="add_file"><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_ADD_ANOTHER_FILE');?></a>
         <input type="hidden" name="file_count" id="file_count" value="1"/>
     </div>
+   
+    <div id='addcomment'>
     <?php echo $updateField; ?>
+    </div>
     <button class="button" name="send_reply" id='send_reply'><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_UPDATE_SEND_REPLY');?></button>
 </form>
 <script>
