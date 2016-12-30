@@ -28,7 +28,7 @@ include_once 'components/com_advancedopenportal/models/SugarUpdate.php';
 
 class SugarCasesConnection {
 
-    private $case_fields = array('id','name','date_entered','date_modified','description','case_number','type','status','state','priority','contact_created_by_id', 'contact_created_by_name','resolution','account_id','product_c','escalation_number_c');
+    private $case_fields = array('id','name','date_entered','date_modified','description','case_number','type','status','state','priority','contact_created_by_id', 'contact_created_by_name','resolution','account_id');
     private $case_update_fields = array('id','name','date_entered','date_modified','description','contact','contact_id', 'internal', 'assigned_user_id');
     private $contact_fields = array('id','first_name','last_name','date_entered','date_modified','description','portal_user_type','account_id');
     private $user_fields = array('id','first_name', 'last_name', 'date_entered','date_modified','description');
@@ -257,23 +257,13 @@ class SugarCasesConnection {
         $contact =  new SugarUpdate($sugarcontact['entry_list'][0],$sugarcontact['relationship_list'][0]);
         return $contact;
     }
-     public function getMemberAccounts($ParentAccountId){
-         //Grab all member-accounts linked to contact account (parent account)
-        $sugarmemberaccounts = $this->restClient->getRelationships('Account', $ParentAccountId,'member_account','',$this->account_fields);
-        return $sugarmemberaccounts;
-    }
+ 
    
     public function getCases($contact_id){
         $contact = $this->getContact($contact_id);
         switch($contact->portal_user_type){
             case 'Account':
-                $cases = $this->fromSugarCases($this->restClient->getRelationships('Accounts', $contact->account_id,'cases','',$this->case_fields,
-                        array(
-                array('name'=>'accounts',
-                    'value' =>
-                    $this->account_fields
-                ))
-                        ));
+                $cases = $this->fromSugarCases($this->restClient->getRelationships('Accounts', $contact->account_id,'cases','',$this->case_fields));
                 break;
             case 'Single':
             default:

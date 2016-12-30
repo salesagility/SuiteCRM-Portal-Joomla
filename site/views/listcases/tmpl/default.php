@@ -40,7 +40,6 @@ if(!$this->validPortalUser || $this->userBlocked){
     <tr>
         <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_NUMBER');?></th>
         <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_SUBJECT');?></th>
-        <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_PRODUCT');?></th>
         <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS');?></th>
         <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATE');?></th>
         <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_CREATED_BY');?></th>
@@ -56,13 +55,12 @@ foreach($this->cases as $case){
     <tr>
         <td><?php echo $case->case_number;?></td>
         <td><a href='?option=com_advancedopenportal&view=showcase&id=<?php echo $case->id;?>'><?php echo $case->name;?></a></td>
-        <td><?php echo $case->product_c;?></td>
         <td><?php echo $case->status_display;?></td>
         <td><?php echo $case->state;?></td>
         <td><?php echo $case->contact_created_by_name;?></td>
         <td><?php echo $case->contact_created_by_id;?></td>
         <td><?php echo $case->date_entered_display;?></td>
-        <td><?php echo $case->account_id;?></td>
+        <td><?php echo $case->date_modified_display;?></td>
     </tr>
     
 <?php
@@ -110,10 +108,9 @@ foreach($this->cases as $case){
                 {"sWidth": "5%", "aTargets": [0]},
                 {"sWidth": "45%", "aTargets": [1]},
                 {"sWidth": "10%", "aTargets": [2]},
-                {"sWidth": "10%", "aTargets": [3]},
-                { "bVisible": false, "aTargets": [4]},
+                {"bVisible": false, "aTargets": [3]},
+                { "sWidth": "10%", "aTargets": [4]},
                 {"bVisible": false, "aTargets": [5]},
-                { "bVisible": false, "aTargets": [6]},
                 {"sWidth": "15%", "aTargets": [6]},
                 {"sWidth": "15%", "aTargets": [7]}
             ]

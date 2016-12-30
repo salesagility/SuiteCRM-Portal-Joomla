@@ -94,20 +94,13 @@ if($this->allow_case_reopen && strpos($this->case->status, 'Closed') === 0){
              <span><?php echo $this->case->date_entered;?></span>
         </div>
        
-    <div class="case_fields" id="case_product">
-             <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_PRODUCT');?>
-             <span><?php echo $this->case->product_c;?></span>
+
+    <div class="case_fields" id="case_last_update">
+         <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_LAST_UPDATE');?>
+         <span><?php echo $this->case->date_modified;?></span>
     </div>
     
-        <div class="case_fields" id="case_last_update">
-             <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_LAST_UPDATE');?>
-             <span><?php echo $this->case->date_modified;?></span>
-        </div>
-    
-    <div class="case_fields" id="case_escalation_number">
-             <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_ESCALATION_NUMBER');?>
-             <span><?php echo $this->case->escalation_number_c;?></span>
-    </div>
+
   
     
 
@@ -118,7 +111,7 @@ if($this->allow_case_reopen && strpos($this->case->status, 'Closed') === 0){
         <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_SUBJECT');?>
     </div>
    
-    <div class="case_subject" id="case_subject">
+    <div class="case_textarea" id="case_subject">
         <?php echo $this->case->name;?> 
     </div>
     
@@ -126,7 +119,7 @@ if($this->allow_case_reopen && strpos($this->case->status, 'Closed') === 0){
        <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_DESCRIPTION');?> 
     </div>
     
-    <div class="case_description" id="case_description">
+    <div class="case_textarea" id="case_description">
         <?php
         echo html_entity_decode($this->case->description);
         displayNotes($this->case);
@@ -137,7 +130,7 @@ if($this->allow_case_reopen && strpos($this->case->status, 'Closed') === 0){
         <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_RESOLUTION');?>
     </div>
    
-    <div class="case_resolution" id="case_resolution">
+    <div class="case_textarea" id="case_resolution">
         <?php
         echo html_entity_decode($this->case->resolution);
         displayNotes($this->case);
