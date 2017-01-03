@@ -7,6 +7,6 @@ defined('_JEXEC') or die('Restricted Access');
         &nbsp;
     </td>
     <td>
-        <button class="submit" type="submit" name="submit">Save Settings</button>
+        <button class="submit" type="submit" name="submit"><?php echo JText::_('COM_ADVANCEDOPENPORTAL_SETTINGS_SAVE');?></button>
     </td>
 </tr>

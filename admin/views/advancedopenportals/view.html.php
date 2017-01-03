@@ -51,6 +51,6 @@ class AdvancedOpenPortalViewAdvancedOpenPortals extends JViewLegacy
     protected function setDocument()
     {
         $document = JFactory::getDocument();
-        $document->setTitle(JText::_('Advanced OpenPortal Settings'));
+        $document->setTitle(JText::_('COM_ADVANCEDOPENPORTAL_MANAGER_ADVANCEDOPENPORTALS_BROWSER'));
     }
 }
