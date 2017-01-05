@@ -84,7 +84,7 @@ foreach($this->cases as $case){
             if(!chosen){
                 return true;
             }
-            var rowVal = aData[4];
+            var rowVal = aData[3];
             return rowVal == chosen;
         }
     );
@@ -94,7 +94,7 @@ foreach($this->cases as $case){
             if(!own){
                 return true;
             }
-            var rowVal = aData[6];
+            var rowVal = aData[5];
             return rowVal === '<?php echo $this->contact->id?>';
         }
     );
