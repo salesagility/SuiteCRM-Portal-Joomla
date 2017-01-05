@@ -28,11 +28,12 @@ include_once 'components/com_advancedopenportal/models/SugarUpdate.php';
 
 class SugarCasesConnection {
 
-    private $case_fields = array('id','name','date_entered','date_modified','description','case_number','type','status','state','priority','contact_created_by_id', 'contact_created_by_name');
+    private $case_fields = array('id','name','date_entered','date_modified','description','case_number','type','status','state','priority','contact_created_by_id', 'contact_created_by_name','resolution','account_id');
     private $case_update_fields = array('id','name','date_entered','date_modified','description','contact','contact_id', 'internal', 'assigned_user_id');
     private $contact_fields = array('id','first_name','last_name','date_entered','date_modified','description','portal_user_type','account_id');
     private $user_fields = array('id','first_name', 'last_name', 'date_entered','date_modified','description');
     private $note_fields = array('id','name', 'date_entered','date_modified','description','filename','file_url');
+    private $account_fields = array('id','name', 'date_entered','date_modified','description');
 
     private static $singleton;
 
@@ -186,13 +187,13 @@ class SugarCasesConnection {
             array('name'=>'notes',
                 'value' => $this->note_fields),
             array('name'=>'accounts',
-                'value' => array('id')),
+                'value' => $this->account_fields),
             array('name'=>'contacts',
-                'value' => array('id')),
+                'value' => $this->contact_fields),
         ));
 
          $case = new SugarCase($sugarcase['entry_list'][0],$sugarcase['relationship_list'][0]);
-
+       
         $contact = $this->getContact($contact_id);
         $access = false;
         switch($contact->portal_user_type){
@@ -256,7 +257,8 @@ class SugarCasesConnection {
         $contact =  new SugarUpdate($sugarcontact['entry_list'][0],$sugarcontact['relationship_list'][0]);
         return $contact;
     }
-
+ 
+   
     public function getCases($contact_id){
         $contact = $this->getContact($contact_id);
         switch($contact->portal_user_type){

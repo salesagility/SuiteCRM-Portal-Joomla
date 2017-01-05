@@ -14,13 +14,9 @@ if(!$this->validPortalUser || $this->userBlocked){
 }
 
 ?>
-<form action="<?php echo JURI::base(); ?>index.php" method="get">
-    <input type="hidden" name="option" value="com_advancedopenportal">
-    <input type="hidden" name="view" value="newcase">
-    <input class="button" type="submit" value="<?php echo JText::_('COM_ADVANCEDOPENPORTAL_CREATE_CASE');?>">
-</form>
-<div id="select_controls">
-<label for="status_select"><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS');?>:</label></label><select id="status_select">
+
+<div id="select_controls" style="display: inline;">
+<label for="status_select"><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS');?>:</label><select id="status_select">
     <option value=""><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS_ALL');?></option>
         <?php
         foreach($this->states['options'] as $state){
@@ -66,11 +62,19 @@ foreach($this->cases as $case){
         <td><?php echo $case->date_entered_display;?></td>
         <td><?php echo $case->date_modified_display;?></td>
     </tr>
+    
 <?php
 }
 ?>
     </tbody>
 </table>
+
+<form action="<?php echo JURI::base(); ?>index.php" method="get">
+    <input type="hidden" name="option" value="com_advancedopenportal">
+    <input type="hidden" name="view" value="newcase">
+    <input class="button" type="submit" value="<?php echo JText::_('COM_ADVANCEDOPENPORTAL_CREATE_CASE');?>">
+</form>
+
 
 
 <script>
@@ -102,11 +106,11 @@ foreach($this->cases as $case){
             "aaSorting": [[ 0, "desc" ]],
             "aoColumnDefs": [
                 {"sWidth": "5%", "aTargets": [0]},
-                {"sWidth": "40%", "aTargets": [1]},
+                {"sWidth": "45%", "aTargets": [1]},
                 {"sWidth": "10%", "aTargets": [2]},
-                { "bVisible": false, "aTargets": [3]},
-                {"sWidth": "15%", "aTargets": [4]},
-                { "bVisible": false, "aTargets": [5]},
+                {"bVisible": false, "aTargets": [3]},
+                 {"sWidth": "10%", "aTargets": [4]},
+                 {"bVisible": false, "aTargets": [5]},
                 {"sWidth": "15%", "aTargets": [6]},
                 {"sWidth": "15%", "aTargets": [7]}
             ]
@@ -120,7 +124,7 @@ foreach($this->cases as $case){
         });
         $('#case_text_search').keyup(function(){
             table.fnFilter( $(this).val() );
-        })
+        });
     } );
 
 </script>
