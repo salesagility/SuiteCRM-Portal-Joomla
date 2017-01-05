@@ -95,12 +95,10 @@ if($this->allow_case_reopen && strpos($this->case->status, 'Closed') === 0){
         </div>
        
 
-    <div class="case_fields" id="case_last_update">
+        <div class="case_fields" id="case_last_update">
          <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_LAST_UPDATE');?>
          <span><?php echo $this->case->date_modified;?></span>
-    </div>
-    
-
+        </div>
   
     
 

@@ -16,7 +16,7 @@ if(!$this->validPortalUser || $this->userBlocked){
 ?>
 
 <div id="select_controls" style="display: inline;">
-<label for="status_select"><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS');?>:</label></label><select id="status_select">
+<label for="status_select"><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS');?>:</label><select id="status_select">
     <option value=""><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS_ALL');?></option>
         <?php
         foreach($this->states['options'] as $state){
@@ -84,7 +84,7 @@ foreach($this->cases as $case){
             if(!chosen){
                 return true;
             }
-            var rowVal = aData[3];
+            var rowVal = aData[4];
             return rowVal == chosen;
         }
     );
@@ -94,7 +94,7 @@ foreach($this->cases as $case){
             if(!own){
                 return true;
             }
-            var rowVal = aData[5];
+            var rowVal = aData[6];
             return rowVal === '<?php echo $this->contact->id?>';
         }
     );
@@ -109,8 +109,8 @@ foreach($this->cases as $case){
                 {"sWidth": "45%", "aTargets": [1]},
                 {"sWidth": "10%", "aTargets": [2]},
                 {"bVisible": false, "aTargets": [3]},
-                { "sWidth": "10%", "aTargets": [4]},
-                {"bVisible": false, "aTargets": [5]},
+                 {"sWidth": "10%", "aTargets": [4]},
+                 {"bVisible": false, "aTargets": [5]},
                 {"sWidth": "15%", "aTargets": [6]},
                 {"sWidth": "15%", "aTargets": [7]}
             ]
@@ -124,7 +124,7 @@ foreach($this->cases as $case){
         });
         $('#case_text_search').keyup(function(){
             table.fnFilter( $(this).val() );
-        })
+        });
     } );
 
 </script>
