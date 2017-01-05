@@ -28,7 +28,7 @@ include_once 'components/com_advancedopenportal/models/SugarUpdate.php';
 
 class SugarCasesConnection {
 
-    private $case_fields = array('id','name','date_entered','date_modified','description','case_number','type','status','state','priority','contact_created_by_id', 'contact_created_by_name','resolution','account_id','product_c','escalation_number_c');
+    private $case_fields = array('id','name','date_entered','date_modified','description','case_number','type','status','state','priority','contact_created_by_id', 'contact_created_by_name','resolution','account_id');
     private $case_update_fields = array('id','name','date_entered','date_modified','description','contact','contact_id', 'internal', 'assigned_user_id');
     private $contact_fields = array('id','first_name','last_name','date_entered','date_modified','description','portal_user_type','account_id');
     private $user_fields = array('id','first_name', 'last_name', 'date_entered','date_modified','description');
