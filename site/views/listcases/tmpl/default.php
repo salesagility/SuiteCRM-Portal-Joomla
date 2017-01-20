@@ -31,7 +31,7 @@ if(!$this->validPortalUser || $this->userBlocked){
         ?>
 </select>
     <?php
-    if($this->contact->portal_user_type === 'Account'){
+    if(($this->contact->portal_user_type === 'Account')||($this->contact->portal_user_type === 'Distributor')){
     ?>
     <label><?php echo JText::_('COM_ADVANCEDOPENPORTAL_OWN_CASES');?>: <input type="checkbox" name="own_filter" id="own_filter"></label>
     <?php
@@ -43,6 +43,7 @@ if(!$this->validPortalUser || $this->userBlocked){
     <thead>
     <tr>
         <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_NUMBER');?></th>
+        <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_ACCOUNT');?></th>
         <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_SUBJECT');?></th>
         <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS');?></th>
         <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATE');?></th>
@@ -58,6 +59,7 @@ foreach($this->cases as $case){
 ?>
     <tr>
         <td><?php echo $case->case_number;?></td>
+        <td><?php echo $case->account;?></td>
         <td><a href='?option=com_advancedopenportal&view=showcase&id=<?php echo $case->id;?>'><?php echo $case->name;?></a></td>
         <td><?php echo $case->status_display;?></td>
         <td><?php echo $case->state;?></td>
@@ -102,13 +104,14 @@ foreach($this->cases as $case){
             "aaSorting": [[ 0, "desc" ]],
             "aoColumnDefs": [
                 {"sWidth": "5%", "aTargets": [0]},
-                {"sWidth": "40%", "aTargets": [1]},
-                {"sWidth": "10%", "aTargets": [2]},
-                { "bVisible": false, "aTargets": [3]},
-                {"sWidth": "15%", "aTargets": [4]},
-                { "bVisible": false, "aTargets": [5]},
-                {"sWidth": "15%", "aTargets": [6]},
-                {"sWidth": "15%", "aTargets": [7]}
+                {"sWidth": "20%", "aTargets": [1]},
+                {"sWidth": "30%", "aTargets": [2]},
+                {"sWidth": "10%", "aTargets": [3]},
+                { "bVisible": false, "aTargets": [4]},
+                {"sWidth": "15%", "aTargets": [5]},
+                { "bVisible": false, "aTargets": [6]},
+                {"sWidth": "10%", "aTargets": [7]},
+                {"sWidth": "10%", "aTargets": [8]}
             ]
         });
         $("#select_controls").prependTo(".table_controls");

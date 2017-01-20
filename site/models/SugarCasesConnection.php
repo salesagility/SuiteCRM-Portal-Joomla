@@ -24,7 +24,7 @@
 include_once 'components/com_advancedopenportal/sugarRestClient.php';
 include_once 'components/com_advancedopenportal/models/SugarCase.php';
 include_once 'components/com_advancedopenportal/models/SugarUpdate.php';
-
+//include_once 'components/com_advancedopenportal/models/SugarAccount.php';
 
 class SugarCasesConnection {
 
@@ -33,7 +33,8 @@ class SugarCasesConnection {
     private $contact_fields = array('id','first_name','last_name','date_entered','date_modified','description','portal_user_type','account_id');
     private $user_fields = array('id','first_name', 'last_name', 'date_entered','date_modified','description');
     private $note_fields = array('id','name', 'date_entered','date_modified','description','filename','file_url');
-
+    private $account_fields = array('id','parent_id');
+    
     private static $singleton;
 
     public function __construct() {
@@ -186,7 +187,7 @@ class SugarCasesConnection {
             array('name'=>'notes',
                 'value' => $this->note_fields),
             array('name'=>'accounts',
-                'value' => array('id')),
+                'value' => $this->account_fields),
             array('name'=>'contacts',
                 'value' => array('id')),
         ));
@@ -196,6 +197,14 @@ class SugarCasesConnection {
         $contact = $this->getContact($contact_id);
         $access = false;
         switch($contact->portal_user_type){
+            case 'Distributor':
+                foreach($case->accounts as $account){
+                    if(($contact->account_id === $account->id)||($contact->account_id === $account->parent_id)){
+                        $access = true;
+                        break;
+                    }
+                }
+                break;
             case 'Account':
                 foreach($case->accounts as $account){
                     if($contact->account_id === $account->id){
@@ -253,13 +262,23 @@ class SugarCasesConnection {
 
     public function getContact($contactId){
         $sugarcontact = $this->restClient->getEntry("Contacts",$contactId,$this->contact_fields);
-        $contact =  new SugarUpdate($sugarcontact['entry_list'][0],$sugarcontact['relationship_list'][0]);
+        $contact =  new SugarUpdate($sugarcontact['entry_list'][0],$sugarcontact['relationship_list'][0]); 
         return $contact;
     }
+   
 
     public function getCases($contact_id){
         $contact = $this->getContact($contact_id);
+       
+        
         switch($contact->portal_user_type){
+            case 'Distributor':
+                $cases = $this->fromSugarCases($this->restClient->getRelationships('Accounts', $contact->account_id,'cases','',$this->case_fields));
+                $accounts = $this->restClient->getEntryList('Accounts', "accounts.parent_id = '".$contact->account_id."'",'','',$this->account_fields);
+                foreach($accounts['entry_list'] as $account){
+                    $cases = $this->addSugarCases($cases,$this->restClient->getRelationships('Accounts', $account['id'],'cases','',$this->case_fields));
+                }            
+                break;
             case 'Account':
                 $cases = $this->fromSugarCases($this->restClient->getRelationships('Accounts', $contact->account_id,'cases','',$this->case_fields));
                 break;
@@ -271,6 +290,13 @@ class SugarCasesConnection {
         return $cases;
     }
 
+    private function addSugarCases($cases, $sugarcases){
+        
+        foreach($sugarcases['entry_list'] as $sugarcase){
+            $cases[] = new SugarCase($sugarcase);
+        }
+        return $cases;
+    }
     private function fromSugarCases($sugarcases){
         $cases = array();
         foreach($sugarcases['entry_list'] as $sugarcase){
