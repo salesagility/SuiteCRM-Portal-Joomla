@@ -31,7 +31,7 @@ if(!$this->validPortalUser || $this->userBlocked){
         ?>
 </select>
     <?php
-    if(($this->contact->portal_user_type === 'Account')||($this->contact->portal_user_type === 'Distributor')){
+    if(($this->contact->portal_user_type === 'Account')||($this->contact->portal_user_type === 'ParentAccount')){
     ?>
     <label><?php echo JText::_('COM_ADVANCEDOPENPORTAL_OWN_CASES');?>: <input type="checkbox" name="own_filter" id="own_filter"></label>
     <?php
@@ -59,7 +59,7 @@ foreach($this->cases as $case){
 ?>
     <tr>
         <td><?php echo $case->case_number;?></td>
-        <td><?php echo $case->account;?></td>
+        <td><?php echo $case->account_name;?></td>
         <td><a href='?option=com_advancedopenportal&view=showcase&id=<?php echo $case->id;?>'><?php echo $case->name;?></a></td>
         <td><?php echo $case->status_display;?></td>
         <td><?php echo $case->state;?></td>
@@ -82,7 +82,7 @@ foreach($this->cases as $case){
             if(!chosen){
                 return true;
             }
-            var rowVal = aData[3];
+            var rowVal = aData[4];
             return rowVal == chosen;
         }
     );
@@ -92,7 +92,7 @@ foreach($this->cases as $case){
             if(!own){
                 return true;
             }
-            var rowVal = aData[5];
+            var rowVal = aData[6];
             return rowVal === '<?php echo $this->contact->id?>';
         }
     );
@@ -104,11 +104,11 @@ foreach($this->cases as $case){
             "aaSorting": [[ 0, "desc" ]],
             "aoColumnDefs": [
                 {"sWidth": "5%", "aTargets": [0]},
-                {"sWidth": "20%", "aTargets": [1]},
-                {"sWidth": "30%", "aTargets": [2]},
+                {"sWidth": "15%", "aTargets": [1]},
+                {"sWidth": "40%", "aTargets": [2]},
                 {"sWidth": "10%", "aTargets": [3]},
                 { "bVisible": false, "aTargets": [4]},
-                {"sWidth": "15%", "aTargets": [5]},
+                {"sWidth": "10%", "aTargets": [5]},
                 { "bVisible": false, "aTargets": [6]},
                 {"sWidth": "10%", "aTargets": [7]},
                 {"sWidth": "10%", "aTargets": [8]}
