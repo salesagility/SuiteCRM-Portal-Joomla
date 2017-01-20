@@ -24,16 +24,15 @@
 include_once 'components/com_advancedopenportal/sugarRestClient.php';
 include_once 'components/com_advancedopenportal/models/SugarCase.php';
 include_once 'components/com_advancedopenportal/models/SugarUpdate.php';
-//include_once 'components/com_advancedopenportal/models/SugarAccount.php';
 
 class SugarCasesConnection {
 
-    private $case_fields = array('id','name','date_entered','date_modified','description','case_number','type','status','state','priority','contact_created_by_id', 'contact_created_by_name');
+    private $case_fields = array('id','name','date_entered','date_modified','description','case_number','type','status','state','priority','contact_created_by_id', 'contact_created_by_name','account_name');
     private $case_update_fields = array('id','name','date_entered','date_modified','description','contact','contact_id', 'internal', 'assigned_user_id');
     private $contact_fields = array('id','first_name','last_name','date_entered','date_modified','description','portal_user_type','account_id');
     private $user_fields = array('id','first_name', 'last_name', 'date_entered','date_modified','description');
     private $note_fields = array('id','name', 'date_entered','date_modified','description','filename','file_url');
-    private $account_fields = array('id','parent_id');
+    private $account_fields = array('id','parent_id','name');
     
     private static $singleton;
 
@@ -197,7 +196,7 @@ class SugarCasesConnection {
         $contact = $this->getContact($contact_id);
         $access = false;
         switch($contact->portal_user_type){
-            case 'Distributor':
+            case 'ParentAccount':
                 foreach($case->accounts as $account){
                     if(($contact->account_id === $account->id)||($contact->account_id === $account->parent_id)){
                         $access = true;
@@ -272,7 +271,7 @@ class SugarCasesConnection {
        
         
         switch($contact->portal_user_type){
-            case 'Distributor':
+            case 'ParentAccount':
                 $cases = $this->fromSugarCases($this->restClient->getRelationships('Accounts', $contact->account_id,'cases','',$this->case_fields));
                 $accounts = $this->restClient->getEntryList('Accounts', "accounts.parent_id = '".$contact->account_id."'",'','',$this->account_fields);
                 foreach($accounts['entry_list'] as $account){
