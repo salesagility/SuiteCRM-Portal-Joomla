@@ -42,7 +42,7 @@ class SugarCasesConnection {
         $this->cache = & JFactory::getCache();
         $this->cache->setCaching( 1 );
         if(!$this->restClient->login()){
-            throw new Exception("Failed to connect to sugar. Please check your settings.");
+            throw new Exception(JText::_('COM_ADVANCEDOPENPORTAL_ERROR_CONNECT'));
         }
     }
 
