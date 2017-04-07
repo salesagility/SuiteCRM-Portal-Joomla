@@ -90,10 +90,7 @@ class SugarCasesConnection {
     public function addFiles($caseId, $caseUpdateId, $contactId, $files){
         $results = array();
 
-        $split = explode('::', $contactId);
-        if(count($split) > 1) {
-            $contactId = $split[1];
-        }
+        self::resolveAccountContactId($contactId);
 
         //For every file, create a new note. Add an attachment and link the note to the
         foreach($files as $file_name => $file_location){
@@ -114,11 +111,7 @@ class SugarCasesConnection {
 
     public function newCase($contact_id,$subject, $description,$type,$priority,$files){
 
-        $split = explode('::', $contact_id);
-        $contact_id = $split[0];
-        if(count($split) > 1) {
-            $contact_id = $split[1];
-        }
+        self::resolveAccountContactId($contact_id);
 
         $data = array("contact_id"=>$contact_id,
                         "contact_created_by_id"=>$contact_id,
@@ -151,10 +144,7 @@ class SugarCasesConnection {
         $data = array();
         //TODO: Add validation that this user can update this case.
 
-        $split = explode('::', $contact_id);
-        if(count($split) > 1) {
-            $contact_id = $split[1];
-        }
+        self::resolveAccountContactId($contact_id);
 
         $data['name'] = $update_text;
         $data['description'] = $update_text;
@@ -167,10 +157,7 @@ class SugarCasesConnection {
 
     public function getUpdate($update_id){
 
-        $split = explode('::', $this->case_update_fields['contact_id']);
-        if(count($split) > 1) {
-            $this->case_update_fields['contact_id'] = $split[1];
-        }
+        self::resolveAccountContactId($this->case_update_fields['contact_id']);
 
         $sugarupdate = $this->restClient->getEntry("AOP_Case_Updates",$update_id,$this->case_update_fields,
             array(
@@ -278,10 +265,7 @@ class SugarCasesConnection {
 
     public function getContact($contactId){
 
-        $split = explode('::', $contactId);
-        if(count($split) > 1) {
-            $contactId = $split[1];
-        }
+        self::resolveAccountContactId($contactId);
 
         $sugarcontact = $this->restClient->getEntry('Contacts', $contactId,$this->contact_fields);
         $contact =  new SugarUpdate($sugarcontact['entry_list'][0],$sugarcontact['relationship_list'][0]);
@@ -289,22 +273,19 @@ class SugarCasesConnection {
     }
 
     public function getCases($contact_id){
-        $split = explode('::', $contact_id);
-        $aid = $cid = $split[0];
-        if(count($split) > 1) {
-            $cid = $split[1];
-        }
-        $contact = $this->getContact($aid);
+
+        $contact = $this->getContact(self::resolveAccountContactId($contact_id));
         switch($contact->portal_user_type){
             case 'Account':
-                $contact = $this->getContact($cid);
+                $contact = $this->getContact($contact_id);
                 $cases = $this->fromSugarCases($this->restClient->getRelationships('Accounts', $contact->account_id,'cases','',$this->case_fields));
                 break;
             case 'Single':
             default:
-                $cases = $this->fromSugarCases($this->restClient->getRelationships('Contacts', $cid,'cases','',$this->case_fields));
+                $cases = $this->fromSugarCases($this->restClient->getRelationships('Contacts', $contact_id, 'cases','',$this->case_fields));
                 break;
         }
+
         return $cases;
     }
 
@@ -341,14 +322,20 @@ class SugarCasesConnection {
 
     public function updateOrCreateContact($sugarId,$user){
 
-        $split = explode('::', $sugarId);
-        if(count($split) > 1) {
-            $sugarId = $split[1];
-        }
+        self::resolveAccountContactId($sugarId);
 
         $contactData = $this->getContactData($sugarId, $user);
         $res = $this->restClient->setEntry('Contacts', $contactData);
         return $res;
+    }
+
+    protected static function resolveAccountContactId(&$contactId) {
+        $split = explode('::', $contactId);
+        $accountId = $contactId = $split[0];
+        if(count($split) > 1) {
+            $contactId = $split[1];
+        }
+        return $accountId;
     }
 
 }
