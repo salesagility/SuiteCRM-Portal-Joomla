@@ -121,6 +121,7 @@ class SugarCasesConnection {
                         "type" => $type,
                         "priority" => $priority,
                         'update_date_entered' => true,
+                        'aop_creator_portal' => JUri::base(),
                     );
         //TODO: Check call results
         //Create the actual case.
