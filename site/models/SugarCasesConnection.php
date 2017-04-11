@@ -89,6 +89,9 @@ class SugarCasesConnection {
 
     public function addFiles($caseId, $caseUpdateId, $contactId, $files){
         $results = array();
+
+        self::resolveAccountContactId($contactId);
+
         //For every file, create a new note. Add an attachment and link the note to the
         foreach($files as $file_name => $file_location){
             $note_data = array(
@@ -99,6 +102,7 @@ class SugarCasesConnection {
             $new_note = $this->restClient->setEntry('Notes',$note_data);
             $note_id = $new_note['id'];
             $this->restClient->set_note_attachment($note_id, $file_name, $file_location);
+
             $this->restClient->setRelationship("Notes",$note_id,"contact",$contactId);
             $results[] = array('id'=>$note_id,'file_name'=>$file_name);
         }
@@ -106,6 +110,8 @@ class SugarCasesConnection {
     }
 
     public function newCase($contact_id,$subject, $description,$type,$priority,$files){
+
+        self::resolveAccountContactId($contact_id);
 
         $data = array("contact_id"=>$contact_id,
                         "contact_created_by_id"=>$contact_id,
@@ -115,6 +121,7 @@ class SugarCasesConnection {
                         "type" => $type,
                         "priority" => $priority,
                         'update_date_entered' => true,
+                        'aop_creator_portal' => JUri::base(),
                     );
         //TODO: Check call results
         //Create the actual case.
@@ -137,6 +144,9 @@ class SugarCasesConnection {
     public function postUpdate($case_id,$update_text, $contact_id){
         $data = array();
         //TODO: Add validation that this user can update this case.
+
+        self::resolveAccountContactId($contact_id);
+
         $data['name'] = $update_text;
         $data['description'] = $update_text;
         $data['contact_id'] = $contact_id;
@@ -147,6 +157,9 @@ class SugarCasesConnection {
     }
 
     public function getUpdate($update_id){
+
+        self::resolveAccountContactId($this->case_update_fields['contact_id']);
+
         $sugarupdate = $this->restClient->getEntry("AOP_Case_Updates",$update_id,$this->case_update_fields,
             array(
                 array('name'=>'contact',
@@ -252,22 +265,28 @@ class SugarCasesConnection {
     }
 
     public function getContact($contactId){
-        $sugarcontact = $this->restClient->getEntry("Contacts",$contactId,$this->contact_fields);
+
+        self::resolveAccountContactId($contactId);
+
+        $sugarcontact = $this->restClient->getEntry('Contacts', $contactId,$this->contact_fields);
         $contact =  new SugarUpdate($sugarcontact['entry_list'][0],$sugarcontact['relationship_list'][0]);
         return $contact;
     }
 
     public function getCases($contact_id){
-        $contact = $this->getContact($contact_id);
+
+        $contact = $this->getContact(self::resolveAccountContactId($contact_id));
         switch($contact->portal_user_type){
             case 'Account':
+                $contact = $this->getContact($contact_id);
                 $cases = $this->fromSugarCases($this->restClient->getRelationships('Accounts', $contact->account_id,'cases','',$this->case_fields));
                 break;
             case 'Single':
             default:
-                $cases = $this->fromSugarCases($this->restClient->getRelationships('Contacts', $contact_id,'cases','',$this->case_fields));
+                $cases = $this->fromSugarCases($this->restClient->getRelationships('Contacts', $contact_id, 'cases','',$this->case_fields));
                 break;
         }
+
         return $cases;
     }
 
@@ -303,9 +322,21 @@ class SugarCasesConnection {
     }
 
     public function updateOrCreateContact($sugarId,$user){
+
+        self::resolveAccountContactId($sugarId);
+
         $contactData = $this->getContactData($sugarId, $user);
-        $res = $this->restClient->setEntry('Contacts',$contactData);
+        $res = $this->restClient->setEntry('Contacts', $contactData);
         return $res;
+    }
+
+    protected static function resolveAccountContactId(&$contactId) {
+        $split = explode('::', $contactId);
+        $accountId = $contactId = $split[0];
+        if(count($split) > 1) {
+            $contactId = $split[1];
+        }
+        return $accountId;
     }
 
 }

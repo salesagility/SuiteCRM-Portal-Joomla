@@ -165,7 +165,11 @@ class AdvancedOpenPortalController extends JControllerLegacy{
 
         if(isset($_REQUEST['sug']) && $_REQUEST['sug'] != ''){
 
-            $contacts = $restClient->getEntry('Contacts',$_REQUEST['sug'],array('name','email1'));
+            $module = $this->getRequestModule();
+
+            $sug = $this->getRequestSugarId();
+
+            $contacts = $restClient->getEntry($module, $sug,array('name','email1'));
             if(!empty($contacts['entry_list'])){
 
                 $contact = $contacts['entry_list'][0]['name_value_list'];
@@ -214,7 +218,7 @@ class AdvancedOpenPortalController extends JControllerLegacy{
                     $user->set('tmp_user', true);
                 }
 
-                $restClient->setEntry('Contacts',array('id'=>$_REQUEST['sug'], 'joomla_account_id' => $user->id,'joomla_account_access' => $pass, ));
+                $restClient->setEntry($module, array('id'=>$sug, 'joomla_account_id' => $user->id,'joomla_account_access' => $pass, ));
                 echo json_encode(array("success"=>true));
             }
         }else{
@@ -231,7 +235,11 @@ class AdvancedOpenPortalController extends JControllerLegacy{
 
         if(isset($_REQUEST['sug']) && $_REQUEST['sug'] != ''){
 
-            $contacts = $restClient->getEntry('Contacts',$_REQUEST['sug'],array('name','email1','joomla_account_id'));
+            $module = $this->getRequestModule();
+
+            $sug = $this->getRequestSugarId();
+
+            $contacts = $restClient->getEntry($module, $sug,array('name','email1','joomla_account_id'));
 
             if(!empty($contacts['entry_list'])){
                 $contact = $contacts['entry_list'][0]['name_value_list'];
@@ -273,7 +281,12 @@ class AdvancedOpenPortalController extends JControllerLegacy{
             include_once 'components/com_advancedopenportal/sugarRestClient.php';
             $restClient = new sugarRestClient();
             $restClient->login();
-            $contacts = $restClient->getEntry('Contacts',$_REQUEST['sug'],array('joomla_account_id'));
+
+            $module = $this->getRequestModule();
+
+            $sug = $this->getRequestSugarId();
+
+            $contacts = $restClient->getEntry($module, $sug,array('joomla_account_id'));
             if(!empty($contacts['entry_list'])){
                 $contact = $contacts['entry_list'][0]['name_value_list'];
                 $userId = (int) $_REQUEST['uid'];
@@ -292,5 +305,18 @@ class AdvancedOpenPortalController extends JControllerLegacy{
         JFactory::getApplication()->close();
     }
 
+    private function getRequestModule() {
+        $module = 'Contacts';
+        if(isset($_REQUEST['m'])) {
+            $module = $_REQUEST['m'];
+        }
+        return $module;
+    }
+
+    private function getRequestSugarId() {
+        $split = explode('::', $_REQUEST['sug']);
+        $sug = $split[0];
+        return $sug;
+    }
 
 }
