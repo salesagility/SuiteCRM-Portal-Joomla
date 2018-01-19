@@ -10,21 +10,15 @@ jimport('joomla.application.component.view');
  */
 class advancedopenportalViewlistcases extends JViewLegacy
 {
-	// Overwriting JViewLegacy display method
-	function display($tpl = null) 
-	{
-        include_once 'components/com_advancedopenportal/models/SugarCasesConnection.php';
-        $user =& JFactory::getUser();
-        $this->errors = array();
+    // Overwriting JViewLegacy display method
+    function display($tpl = null)
+    {
+        $this->contact = SugarCasesConnection::currentSugarContact();
+        $this->cases = $this->contact->getCases();
+        $this->states = SugarCasesConnection::getStates();
+        $this->validPortalUser = SugarCasesConnection::currentUserIsValidPortalUser();
+        $this->userBlocked = SugarCasesConnection::currentUserIsBlocked();
 
-        $contact_id = $user->getParam('sugarid');
-        $caseConnection = SugarCasesConnection::getInstance();
-        $this->cases = $caseConnection->getCases($contact_id);
-        $this->states = $caseConnection->getStates();
-        $this->validPortalUser = SugarCasesConnection::isValidPortalUser($user);
-        $this->userBlocked = SugarCasesConnection::isUserBlocked($user);
-        $this->contact = $caseConnection->getContact($contact_id);
-		// Display the view
-		parent::display($tpl);
-	}
+        parent::display($tpl);
+    }
 }

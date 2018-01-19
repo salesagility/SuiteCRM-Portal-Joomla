@@ -13,7 +13,7 @@ $params = array();
 $updateField = $editor->display( 'update_text', '', '', '', '40', '12', false, null, null, null, $params );
 
 function displayNotes($parent){
-    if(isset($parent->notes)){
+    if(count($parent->notes)){
         ?>
         <br><br>
         <hr>
@@ -29,17 +29,17 @@ function displayNotes($parent){
             }
             ?>
             <a href="?option=com_advancedopenportal&view=attachment&id=<?php echo $note->id?>" target="_new"><?php echo $note->filename?></a>
-        <?php
+            <?php
         }
 
         ?>
-    <?php
+        <?php
     }
 }
 
-if($this->allow_case_reopen && strpos($this->case->status, 'Closed') === 0){
+if($this->allow_case_reopen && !$this->case->isOpen() ){
     $closeButtonText = JText::_('COM_ADVANCEDOPENPORTAL_REOPEN');
-}elseif($this->allow_case_closing && strpos($this->case->status, 'Open') === 0){
+}elseif($this->allow_case_closing && $this->case->isOpen()){
     $closeButtonText = JText::_('COM_ADVANCEDOPENPORTAL_CLOSE');
 }else{
     $closeButtonText = '';
@@ -48,18 +48,18 @@ if($this->allow_case_reopen && strpos($this->case->status, 'Closed') === 0){
 ?>
 
 <div id="case">
-<h2><?php echo $this->case->name;?> (#<?php echo $this->case->case_number;?>) <span><?php echo JText::_('COM_ADVANCEDOPENPORTAL_RAISED') .' '.$this->case->contact_created_by_name .' '.JText::_('COM_ADVANCEDOPENPORTAL_RAISED_ON').' ' .$this->case->date_entered;?> <?php echo $this->case->status_display;?>
-        <?php
-        if($closeButtonText) {
-            ?>
-            <form style='display:inline' action="?option=com_advancedopenportal&task=toggleCaseStatus&format=raw" method="post">
-                <input type="hidden" name="case_status" value="<?php echo $this->case->status; ?>">
+    <h2><?php echo $this->case->name;?> (#<?php echo $this->case->case_number;?>) <span><?php echo JText::_('COM_ADVANCEDOPENPORTAL_RAISED') .' '.$this->case->contact_created_by_name .' '.JText::_('COM_ADVANCEDOPENPORTAL_RAISED_ON').' ' .$this->case->date_entered;?> <?php echo $this->case->status_display;?>
+            <?php
+            if($closeButtonText) {
+                ?>
+                <form style='display:inline' action="?option=com_advancedopenportal&task=toggleCaseStatus&format=raw" method="post">
+                <input type="hidden" name="oldState" value="<?php echo $this->case->isOpen(); ?>">
                 <input type="hidden" name="case_id" value="<?php echo $this->case->id; ?>">
                 <button type="submit"><?php echo $closeButtonText ?></button>
             </form>
-        <?php
-        }
-        ?>
+                <?php
+            }
+            ?>
 
     </span></h2>
     <div class="case_description">
@@ -71,21 +71,21 @@ if($this->allow_case_reopen && strpos($this->case->status, 'Closed') === 0){
 </div>
 <br>
 <div id='updates'>
-<?php
-if(isset($this->case->aop_case_updates)){
-    foreach($this->case->aop_case_updates as $update){
-    ?>
-    <div class='case_update <?php echo $update->poster->type;?>_update'>
-        <span><a class="prettyDate" title="<?php echo $update->date_entered;?>"><?php echo $update->date_entered_display;?></a> <strong><?php echo $update->poster->first_name . " " . $update->poster->last_name;?></strong>  <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_UPDATE_SAID');?>:</span>
-        <p><?php echo $update->description;?></p>
-
-        <?php displayNotes($update);?>
-
-    </div>
     <?php
+    if(isset($this->case->aop_case_updates)){
+        foreach($this->case->aop_case_updates as $update){
+            ?>
+            <div class='case_update <?php echo $update->poster->type;?>_update'>
+                <span><a class="prettyDate" title="<?php echo $update->date_entered;?>"><?php echo $update->date_entered_display;?></a> <strong><?php echo $update->poster->first_name . " " . $update->poster->last_name;?></strong>  <?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_UPDATE_SAID');?>:</span>
+                <p><?php echo $update->description;?></p>
+
+                <?php displayNotes($update);?>
+
+            </div>
+            <?php
+        }
     }
-}
-?>
+    ?>
 </div>
 <br><br>
 <form class="reply_form" action="?option=com_advancedopenportal&task=addupdate&format=raw" method="post" id="replyForm" name="replyForm" enctype="multipart/form-data">
@@ -105,7 +105,7 @@ if(isset($this->case->aop_case_updates)){
         if(update.notes){
             html = html + "<br><br><hr><span><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_FILES');?></span>";
             for(var x = 0; x < update.notes.length; x++){
-                html = html + '&nbsp;<a href="?option=com_advancedopenportal&view=attachment&id='+update.notes[x].id+'" target="_new">'+update.notes[x].file_name+'</a>';
+                html = html + '&nbsp;<a href="?option=com_advancedopenportal&view=attachment&id='+update.notes[x].id+'" target="_new">'+update.notes[x].filename+'</a>';
             }
             html = html + '</div>';
         }

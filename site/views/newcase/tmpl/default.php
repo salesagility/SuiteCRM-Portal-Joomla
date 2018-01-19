@@ -24,10 +24,9 @@ JHTML::_('behavior.formvalidation');
             <label for="type"><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_TYPE'); ?>:</label><br><select
                 name="type">
                 <?php
-                foreach ($this->types['options'] as $type) {
+                foreach ($this->types as $name => $type) {
                     ?>
-                    <option
-                        value="<?php echo $type['name']; ?>" <?php echo $this->types['default_value'] == $type['name'] ? 'selected="selected"' : ''; ?>><?php echo $type['value']; ?></option>
+                    <option value="<?php echo $name ?>"><?php echo $type ?></option>
                 <?php
                 }
                 ?>
@@ -38,9 +37,9 @@ JHTML::_('behavior.formvalidation');
         ?>
             <label for="priority"><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_PRIORITY');?>:</label><br><select name="priority">
                 <?php
-                foreach($this->priorities['options'] as $priority){
+                foreach($this->priorities as $name => $priority){
                     ?>
-                    <option value="<?php echo $priority['name'];?>" <?php echo $this->priorities['default_value'] == $priority['name'] ? 'selected="selected"' : '';?>><?php echo $priority['value'];?></option>
+                    <option value="<?php echo $name ?>"><?php echo $priority ?></option>
                     <?php
                 }
                 ?>
