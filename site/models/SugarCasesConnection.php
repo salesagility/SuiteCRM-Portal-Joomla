@@ -130,6 +130,12 @@ class SugarCasesConnection {
      */
     public static function currentSugarContact()
     {
-        return SugarContact::fromID(self::currentSugarContactId());
+        $currentContact = SugarContact::fromID(self::currentSugarContactId());
+
+        if ($currentContact === null) {
+            JFactory::getApplication()->redirect(JURI::base(), JText::_('COM_ADVANCEDOPENPORTAL_NO_PORTAL_ACCOUNT'));
+        }
+
+        return $currentContact;
     }
 }

@@ -32,9 +32,9 @@ class SugarUpdate extends SugarObject{
     /**
      *  Loads the required data to display the update
      */
-    public function loadDisplayData()
+    public function loadDisplayData($parent = null)
     {
-        $this->loadContact();
+        $this->loadContact($parent);
         $this->loadRelationshipDetails('notes');
     }
 }

@@ -7,11 +7,15 @@ class SugarRestClient
 
     protected $sid = null;
 
-    private $rest_url = "";
+    private $rest_url = "http://php71/SuiteCRM-github-develop/api/";
 
-    private $rest_user = "";
+    private $rest_user = "admin";
 
-    private $rest_pass = "";
+    private $rest_pass = "suitecrm";
+
+    private $rest_client = "1";
+
+    private $rest_secret = "client_secret";
 
     private $token_type;
 
@@ -25,8 +29,13 @@ class SugarRestClient
     {
         include_once 'components/com_advancedopenportal/models/advancedopenportal.php';
         $settings = AdvancedOpenPortalModelAdvancedOpenPortal::getSettings();
-        $this->rest_url = $settings->sugar_url;
-        $this->base_url = $settings->sugar_url;
+
+        return;
+
+        $this->rest_url = rtrim($settings->sugar_url, '/');
+        $this->rest_url .= '/';
+        $this->rest_url = str_replace('/api/', '', $this->rest_url);
+        $this->rest_url .= 'api/';
         $this->rest_user = $settings->sugar_user;
         $this->rest_pass = $settings->sugar_pass;
     }
@@ -54,15 +63,21 @@ class SugarRestClient
         $this->sid = null;
     }
 
+    /**
+     * @param $api_route
+     * @param array $params
+     * @param string $type
+     * @return mixed
+     */
     private function rest_request($api_route, $params = array(), $type = 'GET')
     {
 
         if (!$this->isLoggedIn()) {
-            if (!$this->login()) {
-                throw new Exception("Failed to connect to SuiteCRM. Please check your settings.");
-            }
+            $this->login();
         }
-        return json_decode($this->curlRequest($api_route, $params, $type), true);
+        $result = $this->curlRequest($api_route, $params, $type);
+
+        return json_decode($result, true);
     }
 
     private function isLoggedIn()
@@ -70,18 +85,33 @@ class SugarRestClient
         return isset($this->token_type);
     }
 
+    /**
+     * @return bool
+     * @throws Exception
+     */
     public function login()
     {
 
         $params = array(
             'grant_type' => 'password',
-            'client_id' => '1',
-            'secret' => 'someSecret',
+            'client_id' => $this->rest_client,
+            'client_secret' => $this->rest_secret,
             'username' => $this->rest_user,
-            'password' => 'suitecrm',
+            'password' => $this->rest_pass,
             'scope' => ''
         );
-        $response_data = json_decode($this->curlRequest('/api/oauth/access_token', $params, 'POST'), true);
+
+        $response_data = json_decode($this->curlRequest('oauth/access_token', $params, 'POST'), true);
+
+        if (!empty($response_data['error'])) {
+            throw new Exception(
+                "Failed to connect to SuiteCRM. Please check your settings. (Error: "
+                . $response_data['error']
+                . ', '
+                . $response_data['message']
+                . ')'
+            );
+        }
 
         $this->token_type = $response_data['token_type'];
         $this->token_expires = $response_data['expires_in'];
@@ -118,7 +148,7 @@ class SugarRestClient
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postStr);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        curl_setopt($ch, CURLOPT_COOKIE, 'XDEBUG_SESSION=1');
+        curl_setopt($ch, CURLOPT_COOKIE, 'XDEBUG_SESSION_START=13537');
 
         $output = curl_exec($ch);
 
@@ -133,10 +163,14 @@ class SugarRestClient
         return $output;
     }
 
-    public function getEntry(String $module, String $id)
+    public function getEntry(String $module, String $id, $fields = [])
     {
+        $fieldStr = '';
+        if (count($fields)) {
+            $fieldStr = '&fields[' . $module . ']' . implode(',', $fields);
+        }
 
-        $url = 'api/v8/modules/' . $module . '/' . $id;
+        $url = 'v8/modules/' . $module . '/' . $id . $fieldStr;
         $result = $this->rest_request($url);
 
         return $this->evaluateResult($result);
@@ -156,20 +190,15 @@ class SugarRestClient
     public function getEntries(String $module, Array $ids)
     {
 
-        $url = 'api/v8/modules/' . $module . '?filter[' . $module . ']=' . implode(',', $ids);
+        $url = 'v8/modules/' . $module . '?filter[' . $module . ']=' . implode(',', $ids);
         $result = $this->rest_request($url);
-        echo '<pre>';
-        print_r($url);
-        print_r($result);
-        echo '</pre>';
-        die();
         return $this->evaluateResult($result);
     }
 
     public function getApplicationLanguage()
     {
 
-        $url = 'api/v8/modules/meta/languages';
+        $url = 'v8/modules/meta/languages';
         $result = $this->rest_request($url);
 
         $data = $this->evaluateResult($result);
@@ -190,10 +219,10 @@ class SugarRestClient
 
         if ($id) {
             $postVars['data']['id'] = $id;
-            $url = 'api/v8/modules/' . $module . '/' . $id;
+            $url = 'v8/modules/' . $module . '/' . $id;
             $result = $this->rest_request($url, $postVars, 'PATCH');
         } else {
-            $url = 'api/v8/modules/' . $module;
+            $url = 'v8/modules/' . $module;
             $result = $this->rest_request($url, $postVars, 'POST');
         }
 
@@ -210,7 +239,7 @@ class SugarRestClient
             )
         );
 
-        $url = 'api/v8/modules/' . $module1 . '/' . $module1_id . '/relationships/' . $module2;
+        $url = 'v8/modules/' . $module1 . '/' . $module1_id . '/relationships/' . $module2;
         $result = $this->rest_request($url, $data, 'POST');
 
         return $this->evaluateResult($result);
@@ -219,7 +248,7 @@ class SugarRestClient
     public function getRelationships($module_name, $module_id, $related_module)
     {
 
-        $url = 'api/v8/modules/' . $module_name . '/' . $module_id . '/relationships/' . $related_module;
+        $url = 'v8/modules/' . $module_name . '/' . $module_id . '/relationships/' . $related_module;
         $result = $this->rest_request($url);
 
         return $this->evaluateResult($result, 'data');
@@ -229,7 +258,7 @@ class SugarRestClient
     {
         return false;
 
-        $url = 'api/v8/modules/' . $module . '/meta/attributes';
+        $url = 'v8/modules/' . $module . '/meta/attributes';
         $result = $this->rest_request($url);
 
         return $this->evaluateResult($result);
@@ -239,46 +268,10 @@ class SugarRestClient
     {
         return false;
 
-        $url = 'api/v8/modules/' . $module . '/meta/attributes';
+        $url = 'v8/modules/' . $module . '/meta/attributes';
         $result = $this->rest_request($url);
 
         return $this->evaluateResult($result);
-    }
-
-    public function get_note_attachment($note_id)
-    {
-        return false;
-
-        $call_arguments = array(
-            'session' => $this->sid,
-            'id' => $note_id
-        );
-
-        $result = $this->rest_request(
-            'get_note_attachment',
-            $call_arguments
-        );
-
-        return $result;
-    }
-
-    public function set_note_attachment($note_id, $file_name, $file_location)
-    {
-        return false;
-
-        $result = $this->rest_request(
-            'set_note_attachment',
-            array(
-                'session' => $this->sid,
-                'note' => array(
-                    'id' => $note_id,
-                    'filename' => $file_name,
-                    'file' => base64_encode(file_get_contents($file_location)),
-                ),
-            )
-        );
-
-        return $result;
     }
 
     public function get_document_revision($id)

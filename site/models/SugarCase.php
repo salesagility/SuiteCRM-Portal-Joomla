@@ -34,7 +34,7 @@ class SugarCase extends SugarObject{
         $this->loadRelationshipDetails('aop_case_updates');
         $this->loadRelationshipDetails('notes');
         foreach ($this->aop_case_updates as $update){
-            $update->loadDisplayData();
+            $update->loadDisplayData($this);
         }
     }
 
