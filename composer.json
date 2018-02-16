@@ -1,0 +1,15 @@
+{
+    "name": "salesagility/suitecrm-portal-joomla",
+    "config": {
+        "vendor-dir": "site/vendor"
+    },
+    "require": {
+        "suitecrm/restclient": "dev-master"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:PedroErnst/SuiteCRMClient.git"
+        }
+    ]
+}

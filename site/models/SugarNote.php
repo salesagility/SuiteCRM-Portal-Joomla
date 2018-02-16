@@ -36,7 +36,7 @@ class SugarNote extends SugarObject{
      */
     public function getNoteAttachment()
     {
-        $attachment = SugarRestClient::getInstance()->get_note_attachment($this->id);
+        $attachment = \SuiteCRMRestClient\SuiteCRMRestClient::getInstance()->get_note_attachment($this->id);
         return $attachment['note_attachment'];
     }
 
@@ -57,7 +57,7 @@ class SugarNote extends SugarObject{
      */
     public function setNoteAttachment($note_id, $file_name, $file_location)
     {
-        SugarRestClient::getInstance()->set_note_attachment($note_id, $file_name, $file_location);
+        \SuiteCRMRestClient\SuiteCRMRestClient::getInstance()->set_note_attachment($note_id, $file_name, $file_location);
     }
 
     /**

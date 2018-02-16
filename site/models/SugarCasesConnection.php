@@ -21,7 +21,6 @@
  *
  * @author Salesagility Ltd <support@salesagility.com>
  */
-include_once 'components/com_advancedopenportal/SugarRestClient.php';
 include_once 'components/com_advancedopenportal/models/SugarContact.php';
 include_once 'components/com_advancedopenportal/models/advancedopenportal.php';
 
@@ -32,7 +31,7 @@ class SugarCasesConnection {
      * @return array
      */
     private static function getCaseFields(){
-        return JFactory::getCache()->call(array(SugarRestClient::getInstance(),'getApplicationLanguage'),'ApplicationLanguage');
+        return JFactory::getCache()->call(array(\SuiteCRMRestClient\SuiteCRMRestClient::getInstance(),'getApplicationLanguage'),'ApplicationLanguage');
     }
 
     /**

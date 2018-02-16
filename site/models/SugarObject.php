@@ -2,6 +2,8 @@
 
 include_once 'components/com_advancedopenportal/models/SugarNote.php';
 
+use SuiteCRMRestClient\SuiteCRMRestClient;
+
 /**
  * Class SugarObject
  */
@@ -100,7 +102,7 @@ class SugarObject
     {
         $module = $module ? $module : static::$MODULE;
         $id = $id ? $id : $this->id;
-        $this->$relationship = SugarRestClient::getInstance()->getRelationships($module, $id, $relationship);
+        $this->$relationship = SuiteCRMRestClient::getInstance()->getRelationships($module, $id, $relationship);
         return $this->$relationship;
     }
 
@@ -116,7 +118,7 @@ class SugarObject
     {
         $this->loadRelationships($relationship, $module, $id);
         foreach ($this->$relationship as $key => $data) {
-            $record = SugarRestClient::getInstance()->getEntry($data['type'], $data['id']);
+            $record = SuiteCRMRestClient::getInstance()->getEntry($data['type'], $data['id']);
             $this->$relationship[$key] = self::fromRelation($record);
         }
         return $this->$relationship;
@@ -180,7 +182,7 @@ class SugarObject
      */
     public static function fromID(String $id)
     {
-        $data = SugarRestClient::getInstance()->getEntry(static::$MODULE, $id);
+        $data = SuiteCRMRestClient::getInstance()->getEntry(static::$MODULE, $id);
 
         if ($data === null) {
             return null;
@@ -215,7 +217,7 @@ class SugarObject
     public function save()
     {
         $data = $this->getFieldsToSave();
-        $result = SugarRestClient::getInstance()->setEntry(static::$MODULE, $data);
+        $result = SuiteCRMRestClient::getInstance()->setEntry(static::$MODULE, $data);
         if ($result) {
             return new static($result);
         }
@@ -252,7 +254,7 @@ class SugarObject
      */
     public function addRelationship(String $relationship, String $relatedId)
     {
-        SugarRestClient::getInstance()->setRelationship(static::$MODULE, $this->id, $relationship, $relatedId);
+        SuiteCRMRestClient::getInstance()->setRelationship(static::$MODULE, $this->id, $relationship, $relatedId);
         return $this;
     }
 }

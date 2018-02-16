@@ -31,10 +31,11 @@
 		<folder>js</folder>
 		<folder>models</folder>
 		<folder>views</folder>
+		<folder>vendor</folder>
 		<filename>controller.php</filename>
 		<filename>index.html</filename>
 		<filename>advancedopenportal.php</filename>
-		<filename>sugarRestClient.php</filename>
+		<filename>JoomlaAdapter.php</filename>
 	</files>
  
 	<administration>
