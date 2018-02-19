@@ -9,7 +9,7 @@ jimport('joomla.application.component.modellist');
 class AdvancedOpenPortalModelAdvancedOpenPortals extends JModelList
 {
 
-    public static function storeSettings($url, $user, $pass, $reopen, $close, $priority, $type){
+    public static function storeSettings($url, $user, $pass, $reopen, $close, $priority, $type, $client_id, $client_secret){
 
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
@@ -17,6 +17,8 @@ class AdvancedOpenPortalModelAdvancedOpenPortals extends JModelList
         $ob->id = 1;
         $ob->sugar_url = $url;
         $ob->sugar_user= $user;
+        $ob->client_id= $client_id;
+        $ob->client_secret= $client_secret;
         $ob->allow_case_reopen = $reopen;
         $ob->allow_case_closing = $close;
         $ob->allow_priority = $priority;

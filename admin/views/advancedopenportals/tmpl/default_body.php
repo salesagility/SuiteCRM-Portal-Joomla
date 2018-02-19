@@ -8,13 +8,19 @@ defined('_JEXEC') or die('Restricted Access');
     <table class="adminlist">
         <tbody>
             <tr class="row0">
-		        <td>Sugar URL</td><td><input type="text" size="40" value="<?php echo $this->items->sugar_url ?>" name="sugar_url"></td>
+		        <td>SuiteCRM URL</td><td><input type="text" size="40" value="<?php echo $this->items->sugar_url ?>" name="sugar_url"></td>
             </tr>
             <tr class="row1">
-                <td>Sugar Username</td><td><input type="text" value="<?php echo $this->items->sugar_user ?>" name="sugar_user"></td>
+                <td>SuiteCRM Username</td><td><input type="text" value="<?php echo $this->items->sugar_user ?>" name="sugar_user"></td>
             </tr>
             <tr class="row0">
-                <td>Sugar Password</td><td><input type="password" value="<?php echo $this->items->sugar_pass ?>" name="sugar_pass"></td>
+                <td>SuiteCRM Password</td><td><input type="password" value="" name="sugar_pass"></td>
+	        </tr>
+            <tr class="row1">
+                <td>OAuth2 Client ID</td><td><input type="text" value="<?php echo $this->items->client_id ?>" name="client_id"></td>
+            </tr>
+            <tr class="row0">
+                <td>OAuth2 Client Secret</td><td><input type="text" value="<?php echo $this->items->client_secret ?>" name="client_secret"></td>
 	        </tr>
             <tr class="row1">
                 <td><label for="allow_case_reopen">Allow reopening cases</label></td><td><input type="checkbox" <?php echo $this->items->allow_case_reopen ? 'checked="checked"' : '';?> name="allow_case_reopen" id="allow_case_reopen"></td>

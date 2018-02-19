@@ -25,7 +25,9 @@ class AdvancedOpenPortalController extends JControllerLegacy
             $close = !empty($_REQUEST['allow_case_closing']);
             $priority = !empty($_REQUEST['allow_priority']);
             $type = !empty($_REQUEST['allow_type']);
-            AdvancedOpenPortalModelAdvancedOpenPortals::storeSettings($url,$user,$pass, $reopen, $close, $priority, $type);
+            $client_id = $_REQUEST['client_id'];
+            $client_secret = $_REQUEST['client_secret'];
+            AdvancedOpenPortalModelAdvancedOpenPortals::storeSettings($url,$user,$pass, $reopen, $close, $priority, $type, $client_id, $client_secret);
             JFactory::getApplication()->enqueueMessage(JText::_('COM_ADVANCEDOPENPORTAL_SETTINGS_SAVED'));
 
         }
