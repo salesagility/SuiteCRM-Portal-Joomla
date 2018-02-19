@@ -41,6 +41,7 @@
 namespace SuiteCRMRestClient\Adapters;
 
 require_once __DIR__ . '/vendor/suitecrm/restclient/src/Adapters/ConfigurationAdapter.php';
+include_once 'models/advancedopenportal.php';
 
 /**
  * Class DummyAdapter
@@ -54,12 +55,12 @@ class JoomlaAdapter implements ConfigurationAdapter
     /**
      * @var string
      */
-    private $rest_url = "http://php71/SuiteCRM-github-develop/api/";
+    private $rest_url = "";
 
     /**
      * @var string
      */
-    private $rest_user = "admin";
+    private $rest_user = "";
 
     /**
      * @var string
@@ -69,17 +70,29 @@ class JoomlaAdapter implements ConfigurationAdapter
     /**
      * @var string
      */
-    private $rest_client = "1";
+    private $rest_client = "";
 
     /**
      * @var string
      */
-    private $rest_secret = "client_secret";
+    private $rest_secret = "";
 
     /**
      * @var string
      */
     private $grant_type = "password";
+
+    /**
+     * JoomlaAdapter constructor.
+     */
+    public function __construct()
+    {
+        $settings = \AdvancedOpenPortalModelAdvancedOpenPortal::getSettings();
+        $this->rest_client = $settings->client_id;
+        $this->rest_secret = $settings->client_secret;
+        $this->rest_user = $settings->sugar_user;
+        $this->rest_url = $settings->sugar_url;
+    }
 
     /**
      * @return string
