@@ -11,13 +11,7 @@ defined('_JEXEC') or die('Restricted Access');
 		        <td>SuiteCRM URL</td><td><input type="text" size="40" value="<?php echo $this->items->sugar_url ?>" name="sugar_url"></td>
             </tr>
             <tr class="row1">
-                <td>SuiteCRM Username</td><td><input type="text" value="<?php echo $this->items->sugar_user ?>" name="sugar_user"></td>
-            </tr>
-            <tr class="row0">
-                <td>SuiteCRM Password</td><td><input type="password" value="" name="sugar_pass"></td>
-	        </tr>
-            <tr class="row1">
-                <td>OAuth2 Client ID</td><td><input type="text" value="<?php echo $this->items->client_id ?>" name="client_id"></td>
+                <td>OAuth2 Client ID (should be 'Client Credentials' type)</td><td><input type="text" value="<?php echo $this->items->client_id ?>" name="client_id"></td>
             </tr>
             <tr class="row0">
                 <td>OAuth2 Client Secret</td><td><input type="text" value="<?php echo $this->items->client_secret ?>" name="client_secret"></td>

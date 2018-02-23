@@ -80,7 +80,7 @@ class JoomlaAdapter implements ConfigurationAdapter
     /**
      * @var string
      */
-    private $grant_type = "password";
+    private $grant_type = "client_credentials";
 
     /**
      * JoomlaAdapter constructor.

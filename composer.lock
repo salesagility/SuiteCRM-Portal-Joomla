@@ -244,12 +244,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PedroErnst/SuiteCRMClient.git",
-                "reference": "e4d00df34f51ca9670f7946799de3b2e349bbd70"
+                "reference": "7f4dc8ccfab2fe1647d8af4d2d8c9c9a6b3776d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PedroErnst/SuiteCRMClient/zipball/e4d00df34f51ca9670f7946799de3b2e349bbd70",
-                "reference": "e4d00df34f51ca9670f7946799de3b2e349bbd70",
+                "url": "https://api.github.com/repos/PedroErnst/SuiteCRMClient/zipball/7f4dc8ccfab2fe1647d8af4d2d8c9c9a6b3776d3",
+                "reference": "7f4dc8ccfab2fe1647d8af4d2d8c9c9a6b3776d3",
                 "shasum": ""
             },
             "require": {
@@ -272,7 +272,7 @@
                 "source": "https://github.com/PedroErnst/SuiteCRMClient/tree/master",
                 "issues": "https://github.com/PedroErnst/SuiteCRMClient/issues"
             },
-            "time": "2018-02-16 15:13:34"
+            "time": "2018-02-23 16:06:35"
         }
     ],
     "packages-dev": [],
