@@ -274,7 +274,7 @@ class SugarCasesConnection {
     private function fromSugarCases($sugarcases){
         $cases = array();
         foreach($sugarcases['entry_list'] as $sugarcase){
-            $cases[] = new SugarCase($sugarcase);
+            $cases[] = new SugarCase($sugarcase,array());
         }
         return $cases;
     }
