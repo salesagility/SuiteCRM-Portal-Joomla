@@ -1,9 +1,17 @@
 <?php
 
 include_once 'components/com_advancedopenportal/models/SugarObject.php';
-class SugarCase extends SugarObject{
-    public function __construct($object,$relations){
-        parent::__construct($object,$relations);
+
+class SugarCase extends SugarObject
+{
+    /**
+     * SugarCase constructor.
+     * @param $object
+     * @param array $relations
+     */
+    public function __construct($object, $relations = array())
+    {
+        parent::__construct($object, $relations);
         $this->description = nl2br($this->description);
         include_once 'components/com_advancedopenportal/models/SugarCasesConnection.php';
         $caseConnection = SugarCasesConnection::getInstance();
