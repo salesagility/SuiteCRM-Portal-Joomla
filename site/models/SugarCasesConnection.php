@@ -108,14 +108,14 @@ class SugarCasesConnection {
     public function newCase($contact_id,$subject, $description,$type,$priority,$files){
 
         $data = array("contact_id"=>$contact_id,
-                        "contact_created_by_id"=>$contact_id,
-                        "name" => $subject,
-                        "status" => 'New',
-                        "description" => $description,
-                        "type" => $type,
-                        "priority" => $priority,
-                        'update_date_entered' => true,
-                    );
+            "contact_created_by_id"=>$contact_id,
+            "name" => $subject,
+            "status" => 'New',
+            "description" => $description,
+            "type" => $type,
+            "priority" => $priority,
+            'update_date_entered' => true,
+        );
         //TODO: Check call results
         //Create the actual case.
         $response = $this->restClient->setEntry('Cases',$data);
@@ -138,7 +138,8 @@ class SugarCasesConnection {
         $data = array();
         //TODO: Add validation that this user can update this case.
         $data['name'] = $update_text;
-        $data['description'] = $update_text;
+        $data['description'] = nl2br($update_text);
+        $data['description'] = str_replace("\n", "", $data['description']);
         $data['contact_id'] = $contact_id;
         $data['case_id'] = $case_id;
         $response = $this->restClient->setEntry('AOP_Case_Updates',$data);
@@ -152,11 +153,11 @@ class SugarCasesConnection {
                 array('name'=>'contact',
                     'value' =>
                         $this->contact_fields
-                    ),
+                ),
                 array('name'=>'assigned_user_link',
                     'value' =>
-                    $this->user_fields
-               )));
+                        $this->user_fields
+                )));
         //TODO: Check exists
         $update =  new SugarUpdate($sugarupdate['entry_list'][0],$sugarupdate['relationship_list'][0]);
         return $update;
@@ -178,76 +179,86 @@ class SugarCasesConnection {
         return $this->restClient->setEntry('Cases',$caseData);
     }
 
-    public function getCase($case_id,$contact_id){
-        $sugarcase = $this->restClient->getEntry("Cases",$case_id,$this->case_fields,
-        array(
-            array('name'=>'aop_case_updates',
-                'value' => $this->case_update_fields),
-            array('name'=>'notes',
-                'value' => $this->note_fields),
-            array('name'=>'accounts',
-                'value' => array('id')),
-            array('name'=>'contacts',
-                'value' => array('id')),
-        ));
+    public function getCase($case_id, $contact_id)
+    {
+        $sugarcase = $this->restClient->getEntry("Cases", $case_id, $this->case_fields,
+            array(
+                array(
+                    'name' => 'aop_case_updates',
+                    'value' => $this->case_update_fields
+                ),
+                array(
+                    'name' => 'notes',
+                    'value' => $this->note_fields
+                ),
+                array(
+                    'name' => 'accounts',
+                    'value' => array('id')
+                ),
+                array(
+                    'name' => 'contacts',
+                    'value' => array('id')
+                ),
+            ));
 
-         $case = new SugarCase($sugarcase['entry_list'][0],$sugarcase['relationship_list'][0]);
+        $case = new SugarCase($sugarcase['entry_list'][0], $sugarcase['relationship_list'][0]);
 
         $contact = $this->getContact($contact_id);
         $access = false;
-        switch($contact->portal_user_type){
-            case 'Account':
-                foreach($case->accounts as $account){
-                    if($contact->account_id === $account->id){
-                        $access = true;
-                        break;
-                    }
+
+        if ($contact->portal_user_type === 'Account' && !empty($contact->account_id)) {
+            foreach ($case->accounts as $account) {
+                if ($contact->account_id === $account->id) {
+                    $access = true;
+                    break;
                 }
-                break;
-            case 'Single':
-            default:
-                foreach($case->contacts as $caseContact){
-                    if($contact->id === $caseContact->id){
-                        $access = true;
-                        break;
-                    }
+            }
+        } else {
+            foreach ($case->contacts as $caseContact) {
+                if ($contact->id === $caseContact->id) {
+                    $access = true;
+                    break;
                 }
-                break;
+            }
         }
-        if(!$access){
+
+        if (!$access) {
             return null;
         }
 
-         //Grab all updates and related contacts in one go
-        $sugarupdates = $this->restClient->getRelationships('Cases', $case_id,'aop_case_updates','',$this->case_update_fields,
+        //Grab all updates and related contacts in one go
+        $sugarupdates = $this->restClient->getRelationships('Cases', $case_id, 'aop_case_updates', '',
+            $this->case_update_fields,
             array(
-                array('name'=>'contact',
-                    'value' =>
-                    $this->contact_fields
+                array(
+                    'name' => 'contact',
+                    'value' => $this->contact_fields
                 ),
-                array('name'=>'assigned_user_link',
-                    'value' =>
-                    $this->user_fields
+                array(
+                    'name' => 'assigned_user_link',
+                    'value' => $this->user_fields
                 ),
-                array('name'=>'notes',
-                    'value' =>
-                    $this->note_fields
-                ))
+                array(
+                    'name' => 'notes',
+                    'value' => $this->note_fields
+                )
+            )
         );
 
         $newupdates = array();
-        foreach($sugarupdates['entry_list'] as $index => $sugarupdate){
-            $update = new SugarUpdate($sugarupdate,$sugarupdates['relationship_list'][$index]);
-            if($update->internal){
+        foreach ($sugarupdates['entry_list'] as $index => $sugarupdate) {
+            $update = new SugarUpdate($sugarupdate, $sugarupdates['relationship_list'][$index]);
+            if ($update->internal) {
                 continue;
             }
             $newupdates[] = $update;
         }
-        usort($newupdates, function($a, $b){
+        usort($newupdates, function ($a, $b) {
             return strtotime($a->date_entered) - (strtotime($b->date_entered));
         });
 
         $case->aop_case_updates = $newupdates;
+
         return $case;
     }
 
@@ -257,24 +268,22 @@ class SugarCasesConnection {
         return $contact;
     }
 
-    public function getCases($contact_id){
+    public function getCases($contact_id)
+    {
         $contact = $this->getContact($contact_id);
-        switch($contact->portal_user_type){
-            case 'Account':
-                $cases = $this->fromSugarCases($this->restClient->getRelationships('Accounts', $contact->account_id,'cases','',$this->case_fields));
-                break;
-            case 'Single':
-            default:
-                $cases = $this->fromSugarCases($this->restClient->getRelationships('Contacts', $contact_id,'cases','',$this->case_fields));
-                break;
+        if ($contact->portal_user_type === 'Account' && !empty($contact->account_id)) {
+            $cases = $this->restClient->getRelationships('Accounts', $contact->account_id, 'cases', '', $this->case_fields);
+        } else {
+            $cases = $this->restClient->getRelationships('Contacts', $contact_id, 'cases', '', $this->case_fields);
         }
-        return $cases;
+
+        return $this->fromSugarCases($cases);
     }
 
     private function fromSugarCases($sugarcases){
         $cases = array();
         foreach($sugarcases['entry_list'] as $sugarcase){
-            $cases[] = new SugarCase($sugarcase);
+            $cases[] = new SugarCase($sugarcase, array());
         }
         return $cases;
     }
