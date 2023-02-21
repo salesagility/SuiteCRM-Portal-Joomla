@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
 	<name>Advanced OpenPortal</name>
-	<creationDate>August 2020</creationDate>
+	<creationDate>February 2023</creationDate>
 	<author>SalesAgility</author>
 	<authorEmail>info@salesagility.com</authorEmail>
 	<authorUrl>https://www.salesagility.com</authorUrl>
