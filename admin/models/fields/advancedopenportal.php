@@ -1,15 +1,17 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die;
- 
-// import the list field type
-jimport('joomla.form.helper');
-JFormHelper::loadFieldClass('list');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Form\FormHelper;
+
+FormHelper::loadFieldClass('list');
  
 /**
  * AdvancedOpenPortal Form Field class for the AdvancedOpenPortal component
  */
-class JFormFieldAdvancedOpenPortal extends JFormFieldList
+class JFormFieldAdvancedOpenPortal extends ListField
 {
 	/**
 	 * The field type.
@@ -25,21 +27,21 @@ class JFormFieldAdvancedOpenPortal extends JFormFieldList
 	 */
 	protected function getOptions() 
 	{
-		$db = JFactory::getDBO();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('id,sugar_url,sugar_user,sugar_pass');
 		$query->from('#__advancedopenportal');
 		$db->setQuery((string)$query);
 		$sagilitysugars = $db->loadObjectList();
-		$options = array();
+		$options = [];
 		if ($sagilitysugars)
 		{
 			foreach($sagilitysugars as $sagilitysugar)
 			{
-				$options[] = JHtml::_('select.option', $sagilitysugar->id, $sagilitysugar->sugar_url, $sagilitysugar->sugar_user,$sagilitysugar->sugar_pass);
+				$options[] = \Joomla\CMS\HTML\HTMLHelper::_('select.option', $sagilitysugar->id, $sagilitysugar->sugar_url, $sagilitysugar->sugar_user,$sagilitysugar->sugar_pass);
 			}
 		}
-		$options = array_merge(parent::getOptions(), $options);
+        $options = array_merge(parent::getOptions(), $options);
 		return $options;
 	}
 }

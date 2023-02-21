@@ -21,6 +21,10 @@
  *
  * @author Salesagility Ltd <support@salesagility.com>
  */
+
+use Joomla\CMS\Cache\CacheController;
+use Joomla\CMS\Factory;
+
 include_once 'components/com_advancedopenportal/sugarRestClient.php';
 include_once 'components/com_advancedopenportal/models/SugarCase.php';
 include_once 'components/com_advancedopenportal/models/SugarUpdate.php';
@@ -35,11 +39,15 @@ class SugarCasesConnection {
     private $note_fields = array('id','name', 'date_entered','date_modified','description','filename','file_url');
 
     private static $singleton;
+    /**
+     * @var CacheController
+     */
+    private $cache;
 
     public function __construct() {
 
         $this->restClient = new sugarRestClient();
-        $this->cache = & JFactory::getCache();
+        $this->cache = Factory::getCache();
         $this->cache->setCaching( 1 );
         if(!$this->restClient->login()){
             throw new Exception("Failed to connect to sugar. Please check your settings.");
@@ -54,7 +62,7 @@ class SugarCasesConnection {
     }
 
     private function getCaseFields(){
-        return $this->cache->call(array($this->restClient,'getAllModuleFields'),'Cases');
+        return $this->cache->get(array($this->restClient,'getAllModuleFields'),'Cases');
     }
 
     public function getTypes(){
@@ -263,21 +271,30 @@ class SugarCasesConnection {
     }
 
     public function getContact($contactId){
-        $sugarcontact = $this->restClient->getEntry("Contacts",$contactId,$this->contact_fields);
-        $contact =  new SugarUpdate($sugarcontact['entry_list'][0],$sugarcontact['relationship_list'][0]);
-        return $contact;
+        if (!empty($contactId)) {
+            $sugarContact = $this->restClient->getEntry("Contacts", $contactId, $this->contact_fields);
+            if (!empty($sugarContact['entry_list'][0])){
+                return new SugarUpdate($sugarContact['entry_list'][0], $sugarContact['relationship_list'][0] ?? []);
+            }
+        }
+        return null;
     }
 
     public function getCases($contact_id)
     {
         $contact = $this->getContact($contact_id);
-        if ($contact->portal_user_type === 'Account' && !empty($contact->account_id)) {
-            $cases = $this->restClient->getRelationships('Accounts', $contact->account_id, 'cases', '', $this->case_fields);
-        } else {
-            $cases = $this->restClient->getRelationships('Contacts', $contact_id, 'cases', '', $this->case_fields);
+        if (!empty($contact)) {
+            if ($contact->portal_user_type === 'Account' && !empty($contact->account_id)) {
+                $cases = $this->restClient->getRelationships('Accounts', $contact->account_id, 'cases', '',
+                    $this->case_fields);
+            } else {
+                $cases = $this->restClient->getRelationships('Contacts', $contact_id, 'cases', '', $this->case_fields);
+            }
+            
+            return $this->fromSugarCases($cases);
         }
-
-        return $this->fromSugarCases($cases);
+        
+        return [];
     }
 
     private function fromSugarCases($sugarcases){

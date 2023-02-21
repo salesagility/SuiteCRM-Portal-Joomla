@@ -9,7 +9,7 @@ class SugarCase extends SugarObject
      * @param $object
      * @param array $relations
      */
-    public function __construct($object, $relations = array())
+    public function __construct($object, $relations = [])
     {
         parent::__construct($object, $relations);
         $this->description = nl2br($this->description);

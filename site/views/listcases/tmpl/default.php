@@ -1,27 +1,30 @@
 <?php
 // No direct access to this file
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 defined('_JEXEC') or die('Restricted access');
 
-$document = &JFactory::getDocument();
-$document->addStyleSheet('components'.DIRECTORY_SEPARATOR.'com_advancedopenportal'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'portal.css');
-$document->addScript('components'.DIRECTORY_SEPARATOR.'com_advancedopenportal'.DIRECTORY_SEPARATOR.'js'.DIRECTORY_SEPARATOR.'jquery.2.0.0.min.js');
-$document->addScript('components'.DIRECTORY_SEPARATOR.'com_advancedopenportal'.DIRECTORY_SEPARATOR.'js'.DIRECTORY_SEPARATOR.'jquery.dataTables.1.9.4.min.js');
+$webAssetManager = Factory::getDocument()->getWebAssetManager();
+$webAssetManager->registerAndUseStyle('portalcss','components/com_advancedopenportal/css/portal.css');
+$webAssetManager->registerAndUseStyle('dataTablesCss','components/com_advancedopenportal/css/jquery.dataTables.min.css');
+$webAssetManager->registerAndUseScript('dataTables','components/com_advancedopenportal/js/jquery.dataTables.min.js');
 
-$user =& JFactory::getUser();
-
-if(!$this->validPortalUser || $this->userBlocked){
+if (!$this->validPortalUser || $this->userBlocked) {
     return;
 }
 
 ?>
-<form action="<?php echo JURI::base(); ?>index.php" method="get">
-    <input type="hidden" name="option" value="com_advancedopenportal">
-    <input type="hidden" name="view" value="newcase">
-    <input class="button" type="submit" value="<?php echo JText::_('COM_ADVANCEDOPENPORTAL_CREATE_CASE');?>">
-</form>
-<div id="select_controls">
-<label for="status_select"><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS');?>:</label></label><select id="status_select">
-    <option value=""><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS_ALL');?></option>
+
+<div class="case-filter btn-toolbar clearfix mt-3" id="select_controls">
+    <div class="filter-search-bar btn-group">
+        <input class="form-control" type="text" id="case_text_search" placeholder="<?php echo Text::_('COM_ADVANCEDOPENPORTAL_SEARCH');?>">
+    </div>
+    &nbsp;
+    <div class="filter-search-bar btn-group">
+    <select id="status_select" class="form-select">
+        <option value=""><?php echo Text::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS_ALL');?></option>
         <?php
         foreach($this->states['options'] as $state){
             ?>
@@ -29,27 +32,38 @@ if(!$this->validPortalUser || $this->userBlocked){
             <?php
         }
         ?>
-</select>
+    </select>
+    </div>
     <?php
     if($this->contact->portal_user_type === 'Account'){
-    ?>
-    <label><?php echo JText::_('COM_ADVANCEDOPENPORTAL_OWN_CASES');?>: <input type="checkbox" name="own_filter" id="own_filter"></label>
-    <?php
+        ?>
+        &nbsp;
+    <div class="own_filter-bar btn-group">
+        <label><?php echo Text::_('COM_ADVANCEDOPENPORTAL_OWN_CASES');?>: <input type="checkbox" name="own_filter" id="own_filter"></label>
+    </div>
+        <?php
     }
     ?>
-    <label><?php echo JText::_('COM_ADVANCEDOPENPORTAL_SEARCH');?>: <input type="text" id="case_text_search" placeholder=""></label>
+    <div class="new-case float-end">
+        <form action="<?php echo URI::base(); ?>index.php" method="get">
+            <input type="hidden" name="option" value="com_advancedopenportal">
+            <input type="hidden" name="view" value="newcase">
+            <input class="btn btn-secondary" type="submit" value="<?php echo Text::_('COM_ADVANCEDOPENPORTAL_CREATE_CASE');?>">
+        </form>
+    </div>
 </div>
-<table id='case_table'>
+
+<table id='case_table' class="display compact">
     <thead>
     <tr>
-        <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_NUMBER');?></th>
-        <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_SUBJECT');?></th>
-        <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS');?></th>
-        <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_STATE');?></th>
-        <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_CREATED_BY');?></th>
-        <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_CREATED_BY');?></th>
-        <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_CREATED');?></th>
-        <th><?php echo JText::_('COM_ADVANCEDOPENPORTAL_CASE_LAST_UPDATE');?></th>
+        <th><?php echo Text::_('COM_ADVANCEDOPENPORTAL_CASE_NUMBER');?></th>
+        <th><?php echo Text::_('COM_ADVANCEDOPENPORTAL_CASE_SUBJECT');?></th>
+        <th><?php echo Text::_('COM_ADVANCEDOPENPORTAL_CASE_STATUS');?></th>
+        <th><?php echo Text::_('COM_ADVANCEDOPENPORTAL_CASE_STATE');?></th>
+        <th><?php echo Text::_('COM_ADVANCEDOPENPORTAL_CASE_CREATED_BY');?></th>
+        <th><?php echo Text::_('COM_ADVANCEDOPENPORTAL_CASE_CREATED_BY');?></th>
+        <th><?php echo Text::_('COM_ADVANCEDOPENPORTAL_CASE_CREATED');?></th>
+        <th><?php echo Text::_('COM_ADVANCEDOPENPORTAL_CASE_LAST_UPDATE');?></th>
     </tr>
     </thead>
     <tbody>
@@ -109,7 +123,7 @@ foreach($this->cases as $case){
                 { "bVisible": false, "aTargets": [5]},
                 {"sWidth": "15%", "aTargets": [6]},
                 {"sWidth": "15%", "aTargets": [7]}
-            ]
+            ],
         });
         $("#select_controls").prependTo(".table_controls");
         $("#status_select").change(function(){

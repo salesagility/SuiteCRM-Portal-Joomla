@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="3.0" method="upgrade">
+<extension type="component" version="3.1" method="upgrade">
 	<name>Advanced OpenPortal</name>
 	<creationDate>February 2023</creationDate>
 	<author>SalesAgility</author>
 	<authorEmail>info@salesagility.com</authorEmail>
 	<authorUrl>https://www.salesagility.com</authorUrl>
-	<version>2.0.3</version>
-	<description>Joomla integration for the Advanced OpenPortal SuiteCRM case management module</description>
- 
+	<version>3.0.0-beta</version>
+	<description>Joomla integration for the SuiteCRM Advanced Open Case Management Portal</description>
+
 	<install> <!-- Runs on install -->
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
@@ -24,8 +24,8 @@
 		</schemas>
 	</update>
 	<languages>
-                <language tag="en-GB">language/en-GB/en-GB.com_advancedopenportal.ini</language>
-        </languages>
+		<language tag="en-GB">language/en-GB/en-GB.com_advancedopenportal.ini</language>
+	</languages>
 	<files folder="site">
 		<folder>css</folder>
 		<folder>js</folder>
@@ -36,9 +36,9 @@
 		<filename>advancedopenportal.php</filename>
 		<filename>sugarRestClient.php</filename>
 	</files>
- 
+
 	<administration>
-		<menu>Advanced OpenPortal</menu>
+		<menu>SuiteCRM Portal</menu>
 		<files folder="admin">
 			<folder>models</folder>
 			<folder>sql</folder>
@@ -48,10 +48,10 @@
 			<filename>index.html</filename>
 			<filename>advancedopenportal.php</filename>
 		</files>
-		
+
 		<languages folder="admin">
 			<language tag="en-GB">language/en-GB/en-GB.com_advancedopenportal.ini</language>
 			<language tag="en-GB">language/en-GB/en-GB.com_advancedopenportal.sys.ini</language>
-		</languages>		
+		</languages>
 	</administration>
 </extension>

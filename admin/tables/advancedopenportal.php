@@ -1,21 +1,20 @@
 <?php
 // No direct access
 defined('_JEXEC') or die('Restricted access');
- 
-// import Joomla table library
-jimport('joomla.database.table');
- 
+
+use Joomla\CMS\Table\Table;
+
 /**
  * AdvancedOpenPortal Table class
  */
-class AdvancedOpenPortalTableAdvancedOpenPortal extends JTable
+class AdvancedOpenPortalTableAdvancedOpenPortal extends Table
 {
 	/**
 	 * Constructor
 	 *
-	 * @param object Database connector object
+	 * @param object $db Database connector object
 	 */
-	function __construct(&$db) 
+	public function __construct(&$db) 
 	{
 		parent::__construct('#__advancedopenportal', 'id', $db);
 	}

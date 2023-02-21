@@ -1,15 +1,15 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
- 
-// import joomla controller library
-jimport('joomla.application.component.controller');
- 
-// Get an instance of the controller prefixed by SaglityPortal
-$controller = JControllerLegacy::getInstance('AdvancedOpenPortal');
- 
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\BaseController;
+
+// Get an instance of the controller
+$controller = BaseController::getInstance('AdvancedOpenPortal');
+
 // Perform the Request task
-$controller->execute(JRequest::getCmd('task'));
+$controller->execute(Factory::getApplication()->getInput()->get('task'));
  
 // Redirect if set by the controller
 $controller->redirect();

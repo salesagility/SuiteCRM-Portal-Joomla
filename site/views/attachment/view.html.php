@@ -2,21 +2,18 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// import Joomla view library
-jimport('joomla.application.component.view');
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\View\HtmlView;
 
-/**
- *
- */
-class advancedopenportalViewattachment extends JViewLegacy
+class advancedopenportalViewattachment extends HtmlView
 {
     // Overwriting JViewLegacy display method
     function display($tpl = null)
     {
         include_once 'components/com_advancedopenportal/models/SugarCasesConnection.php';
-        $user =& JFactory::getUser();
+        $user = Factory::getUser();
         $this->errors = array();
-        $note_id = JRequest::getVar('id');
+        $note_id = Factory::getApplication()->getInput()->get('id');
         $caseConnection = new SugarCasesConnection();
         $this->attachment = $caseConnection->getNoteAttachment($note_id);
         $finfo = finfo_open(FILEINFO_MIME_TYPE);

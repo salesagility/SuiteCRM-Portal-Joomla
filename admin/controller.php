@@ -1,38 +1,70 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
- 
-// import Joomla controller library
-jimport('joomla.application.component.controller');
-include_once 'components/com_advancedopenportal/models/advancedopenportals.php';
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
+
+include_once 'components/com_advancedopenportal/models/AdvancedOpenPortalModel.php';
+
 /**
  * General Controller of Advanced OpenPortal component
  */
-class AdvancedOpenPortalController extends JControllerLegacy
+class AdvancedOpenPortalController extends AdminController
 {
-	/**
-	 * display task
-	 *
-	 * @return void
-	 */
-	function display($cachable = false) 
-	{
-        if(array_key_exists('submit',$_REQUEST)){
-            $url = $_REQUEST['sugar_url'];
-            $user = $_REQUEST['sugar_user'];
-            $pass = $_REQUEST['sugar_pass'];
-            $reopen = !empty($_REQUEST['allow_case_reopen']);
-            $close = !empty($_REQUEST['allow_case_closing']);
-            $priority = !empty($_REQUEST['allow_priority']);
-            $type = !empty($_REQUEST['allow_type']);
-            AdvancedOpenPortalModelAdvancedOpenPortals::storeSettings($url,$user,$pass, $reopen, $close, $priority, $type);
-            JFactory::getApplication()->enqueueMessage(JText::_('COM_ADVANCEDOPENPORTAL_SETTINGS_SAVED'));
 
-        }
+    /**
+     * @throws Exception
+     */
+    public function __construct($config = [], MVCFactoryInterface $factory = null, $app = null, $input = null)
+    {
+        $this->name = 'AdvancedOpenPortals';
+        $this->model_prefix = 'AdvancedOpenPortalModel';
+        
+        parent::__construct($config, $factory, $app, $input);
+    }
+    
+
+    /**
+     * display task
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function display($cachable = false, $urlparams = []): void
+    {
 		// set default view if not set
-		JRequest::setVar('view', JRequest::getCmd('view', 'AdvancedOpenPortals'));
- 
-		// call parent behavior
-		parent::display($cachable);
-	}
+        $this->input->set('view', $this->app->input->getCmd('view', 'AdvancedOpenPortals'));
+        
+        // call parent behavior
+        parent::display($cachable, $urlparams);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function save()
+    {
+        // Check for request forgeries.
+        $this->checkToken();
+        
+        $url = $this->input->get('sugar_url', '', 'trim');
+        $user = $this->input->get('sugar_user', '','trim');
+        $pass = $this->input->get('sugar_pass', '', 'trim');
+        $reopen = $this->input->get('allow_case_reopen', false, 'bool');
+        $close = $this->input->get('allow_case_closing', false, 'bool');
+        $priority = $this->input->get('allow_priority', false, 'bool');
+        $type = $this->input->get('allow_type', false, 'bool');
+        
+        /** @var AdvancedOpenPortalModelAdvancedOpenPortals $model */
+        $model = $this->getModel();
+        
+        if ($model->storeSettings($url, $user, $pass, $reopen, $close, $priority, $type)) {
+            $this->app->enqueueMessage(Text::_('COM_ADVANCEDOPENPORTAL_SETTINGS_SAVED'));
+        }
+        
+        $this->display();
+    }
+    
 }

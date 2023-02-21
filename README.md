@@ -1,4 +1,4 @@
-# SuiteCRM-Portal-Joomla 2.0.3
+# SuiteCRM-Portal-Joomla 3.0.0-beta
 Joomla Plugin for the SuiteCRM Portal
 
 

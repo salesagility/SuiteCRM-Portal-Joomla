@@ -1,20 +1,18 @@
 <?php
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
- 
-// import Joomla view library
-jimport('joomla.application.component.view');
- 
-/**
- *
- */
-class advancedopenportalViewlistcases extends JViewLegacy
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\View\HtmlView;
+
+class advancedopenportalViewlistcases extends HtmlView
 {
 	// Overwriting JViewLegacy display method
 	function display($tpl = null) 
 	{
         include_once 'components/com_advancedopenportal/models/SugarCasesConnection.php';
-        $user =& JFactory::getUser();
+        $user = $this->getCurrentUser();
         $this->errors = array();
 
         $contact_id = $user->getParam('sugarid');

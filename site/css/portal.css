@@ -90,3 +90,7 @@ h2 span{
 #select_controls label{
     display: inline;
 }
+
+.toggle-editor {
+    display: none !important;;
+}
