@@ -1,7 +1,7 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
- 
+
 // import Joomla controller library
 jimport('joomla.application.component.controller');
 require_once 'components/com_advancedopenportal/models/SugarCasesConnection.php';
@@ -148,8 +148,8 @@ class AdvancedOpenPortalController extends JControllerLegacy{
             }
         }
 
+        Factory::getApplication()->redirect(URI::base()."?option=com_advancedopenportal&view=showcase&id=".$case_id);
 
-        echo json_encode($case_update);
     }
 
     function create() {
